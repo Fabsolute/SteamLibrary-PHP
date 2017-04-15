@@ -4,12 +4,27 @@ namespace Fabs\SteamLibrary\Game\CSGO;
 
 use Fabs\SteamLibrary\Game\InventoryBase;
 use Fabs\SteamLibrary\Model\CSGO\CSGOFloatAPIModel;
+use Fabs\SteamLibrary\SteamTradeURLHandler;
 use GuzzleHttp\Client;
 
 class Inventory extends InventoryBase
 {
     const GameID = "730";
     const ContextID = "2";
+
+    /**
+     * @param string $trade_url
+     * @return \Fabs\SteamLibrary\Model\SteamInventoryModel
+     */
+    public function getSteamInventoryFromTradeURL($trade_url)
+    {
+        $partner_id = (new SteamTradeURLHandler())
+            ->setFullURL($trade_url)
+            ->decompose()
+            ->getPartnerId();
+
+        return self::getInventoryFromPartnerID($partner_id);
+    }
 
     /**
      * @param $partner_id string|int
