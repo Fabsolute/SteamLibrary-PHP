@@ -1,0 +1,28 @@
+{
+  "name": "fabs/steam_library",
+  "type": "library",
+  "description": "Steam Library For PHP",
+  "keywords": [
+    "steam",
+    "steam library",
+    "library"
+  ],
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Ahmet Turk",
+      "email": "ahmetturk93@gmail.com",
+      "homepage": "https://github.com/fabsolute"
+    }
+  ],
+  "require": {
+    "php": "^7.0",
+    "guzzlehttp/guzzle": "~6.0",
+    "fabs/serialize": "dev-develop"
+  },
+  "autoload": {
+    "psr-0": {
+      "Fabs\\SteamLibrary": "src"
+    }
+  }
+}
