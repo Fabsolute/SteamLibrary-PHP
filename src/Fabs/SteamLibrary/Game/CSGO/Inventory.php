@@ -14,34 +14,34 @@ class Inventory extends InventoryBase
 
     /**
      * @param string $trade_url
-     * @return \Fabs\SteamLibrary\Model\SteamInventoryModel
+     * @return \Fabs\SteamLibrary\Model\SteamItemModel[]
      */
-    public function getSteamInventoryFromTradeURL($trade_url)
+    public function getItemsFromTradeURL($trade_url)
     {
         $partner_id = (new SteamTradeURLHandler())
             ->setFullURL($trade_url)
             ->decompose()
             ->getPartnerId();
 
-        return self::getInventoryFromPartnerID($partner_id);
+        return self::getItemsFromPartnerID($partner_id);
     }
 
     /**
      * @param $partner_id string|int
-     * @return \Fabs\SteamLibrary\Model\SteamInventoryModel
+     * @return \Fabs\SteamLibrary\Model\SteamItemModel[]
      */
-    public static function getInventoryFromPartnerID($partner_id)
+    public static function getItemsFromPartnerID($partner_id)
     {
-        return self::getSteamInventoryFromPartnerID($partner_id, self::GameID, self::ContextID);
+        return self::getSteamItemsFromPartnerID($partner_id, self::GameID, self::ContextID);
     }
 
     /**
      * @param $steam_id string
-     * @return \Fabs\SteamLibrary\Model\SteamInventoryModel
+     * @return \Fabs\SteamLibrary\Model\SteamItemModel[]
      */
-    public static function getInventoryFromSteamID($steam_id)
+    public static function getItemsFromSteamID($steam_id)
     {
-        return self::getSteamInventoryFromSteamID($steam_id, self::GameID, self::ContextID);
+        return self::getSteamItemsFromSteamID($steam_id, self::GameID, self::ContextID);
     }
 
     /**
