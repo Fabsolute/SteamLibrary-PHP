@@ -42,7 +42,7 @@ class Inventory extends InventoryBase
      * @param $include_cases bool
      * @return \Fabs\SteamLibrary\Model\SteamItemModel[]
      */
-    public static function getInventoryFromSteamID($steam_id, $include_cases = false)
+    public static function getItemsFromSteamID($steam_id, $include_cases = false)
     {
         return self::getSteamItemsFromSteamID($steam_id, self::GameID, self::ContextID, $include_cases);
     }

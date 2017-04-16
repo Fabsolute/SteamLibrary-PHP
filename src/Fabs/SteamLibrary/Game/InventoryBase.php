@@ -37,7 +37,7 @@ class InventoryBase
      * @param $partner_id string|int
      * @return string
      */
-    public static function getSteamIDFromPartnerID($partner_id) : string
+    public static function getSteamIDFromPartnerID($partner_id)
     {
         return '765' . (intval($partner_id) + 61197960265728);
     }

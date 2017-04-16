@@ -11,6 +11,6 @@ namespace Fabs\SteamLibrary\Model;
 
 class SteamItemModel extends SteamAssetModel
 {
-    /** @var  SteamDescriptionModel */
+    /** @var SteamDescriptionModel */
     public $description;
 }
