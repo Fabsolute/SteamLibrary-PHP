@@ -13,4 +13,10 @@ class SteamItemModel extends SteamAssetModel
 {
     /** @var SteamDescriptionModel */
     public $description;
+
+    public function __construct()
+    {
+        parent::__construct();
+        $this->registerProperty('description', SteamDescriptionModel::class);
+    }
 }
