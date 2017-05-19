@@ -8,6 +8,8 @@ use GuzzleHttp\Client;
 
 class InventoryBase
 {
+    const BASE_IMAGE_URL = 'http://cdn.steamcommunity.com/economy/image/';
+
     /**
      * @param $partner_id string|int
      * @param $game_id string
@@ -90,8 +92,23 @@ class InventoryBase
                     break;
                 }
             }
+            if ($steam_item->description != null)
+            {
+                if ($steam_item->description->icon_url != null)
+                {
+                    $steam_item->description->icon_url = self::BASE_IMAGE_URL
+                        . $steam_item->description->icon_url;
+                }
+
+                if ($steam_item->description->icon_url_large != null)
+                {
+                    $steam_item->description->icon_url_large = self::BASE_IMAGE_URL
+                        . $steam_item->description->icon_url_large;
+                }
+            }
             $steam_items[] = $steam_item;
         }
+
         return $steam_items;
     }
 }
