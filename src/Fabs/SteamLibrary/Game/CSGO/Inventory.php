@@ -2,7 +2,7 @@
 
 namespace Fabs\SteamLibrary\Game\CSGO;
 
-use Fabs\SteamLibrary\Game\InventoryBase;
+use Fabs\SteamLibrary\Game\Inventory as InventoryBase;
 use Fabs\SteamLibrary\Model\CSGO\CSGOFloatAPIModel;
 use Fabs\SteamLibrary\SteamTradeURLHandler;
 use GuzzleHttp\Client;

@@ -4,9 +4,10 @@ namespace Fabs\SteamLibrary\Game;
 
 use Fabs\SteamLibrary\Model\SteamInventoryModel;
 use Fabs\SteamLibrary\Model\SteamItemModel;
+use Fabs\SteamLibrary\Model\SteamStickerModel;
 use GuzzleHttp\Client;
 
-class InventoryBase
+class Inventory
 {
     const BASE_IMAGE_URL = 'http://cdn.steamcommunity.com/economy/image/';
 
@@ -80,30 +81,65 @@ class InventoryBase
     private static function getSteamItemsFromInventory($inventory)
     {
         $steam_items = [];
-        foreach ($inventory->assets as $asset)
-        {
+        foreach ($inventory->assets as $asset) {
             $steam_item = new SteamItemModel();
             $steam_item->assetid = $asset->assetid;
-            foreach ($inventory->descriptions as $description)
-            {
-                if ($asset->classid === $description->classid && $asset->instanceid === $description->instanceid)
-                {
+            foreach ($inventory->descriptions as $description) {
+                if ($asset->classid === $description->classid && $asset->instanceid === $description->instanceid) {
                     $steam_item->description = $description;
                     break;
                 }
             }
-            if ($steam_item->description != null)
-            {
-                if ($steam_item->description->icon_url != null)
-                {
+            if ($steam_item->description != null) {
+                if ($steam_item->description->icon_url != null) {
                     $steam_item->description->icon_url = self::BASE_IMAGE_URL
                         . $steam_item->description->icon_url;
                 }
 
-                if ($steam_item->description->icon_url_large != null)
-                {
+                if ($steam_item->description->icon_url_large != null) {
                     $steam_item->description->icon_url_large = self::BASE_IMAGE_URL
                         . $steam_item->description->icon_url_large;
+                }
+
+                foreach ($steam_item->description->tags as $tag) {
+                    if ($tag->category == 'Type') {
+                        $steam_item->type = $tag->internal_name;
+                        break;
+                    }
+                }
+
+                $steam_item->stickers = [];
+
+                foreach ($steam_item->description->descriptions as $item_description) {
+                    if (strpos($item_description->value, 'sticker_info') !== false) {
+                        $sticker_description = $item_description->value;
+                        preg_match("/<center>(.*)<\\/center>/", $sticker_description, $center_value_array);
+                        if (count($center_value_array) > 1) {
+                            $center_value = $center_value_array[1];
+                            preg_match_all("/<img width=64 height=48 src=\"(.*?)\">/",
+                                $center_value, $sticker_images_array);
+                            if (count($sticker_images_array) > 1) {
+                                $sticker_images = $sticker_images_array[1];
+                                preg_match("/<br>Sticker:(.*?)$/", $center_value, $sticker_names_array);
+                                if (count($sticker_names_array) > 1) {
+                                    $sticker_names = explode(', ', $sticker_names_array[1]);
+                                    for ($i = 0; $i < count($sticker_names); $i++) {
+                                        $sticker_name = $sticker_names[$i];
+                                        if (count($sticker_images) > $i) {
+                                            $sticker_image = $sticker_images[$i];
+
+                                            $sticker = new SteamStickerModel();
+                                            $sticker->name = $sticker_name;
+                                            $sticker->image = $sticker_image;
+
+                                            $steam_item->stickers[] = $sticker;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        break;
+                    }
                 }
             }
             $steam_items[] = $steam_item;
