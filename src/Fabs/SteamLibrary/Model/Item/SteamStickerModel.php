@@ -6,7 +6,7 @@
  * Time: 11:26
  */
 
-namespace Fabs\SteamLibrary\Model;
+namespace Fabs\SteamLibrary\Model\Item;
 
 
 use Fabs\Serialize\SerializableObject;

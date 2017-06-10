@@ -6,7 +6,7 @@
  * Time: 18:50
  */
 
-namespace Fabs\SteamLibrary\Model\CSGO;
+namespace Fabs\SteamLibrary\Model\Item\CSGO;
 
 use Fabs\Serialize\SerializableObject;
 

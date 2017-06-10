@@ -2,9 +2,9 @@
 
 namespace Fabs\SteamLibrary\Game;
 
-use Fabs\SteamLibrary\Model\SteamInventoryModel;
-use Fabs\SteamLibrary\Model\SteamItemModel;
-use Fabs\SteamLibrary\Model\SteamStickerModel;
+use Fabs\SteamLibrary\Model\Item\SteamInventoryModel;
+use Fabs\SteamLibrary\Model\Item\ItemModelSteam;
+use Fabs\SteamLibrary\Model\Item\SteamStickerModel;
 use GuzzleHttp\Client;
 
 class Inventory
@@ -15,7 +15,7 @@ class Inventory
      * @param $partner_id string|int
      * @param $game_id string
      * @param $game_context string
-     * @return SteamItemModel[]
+     * @return ItemModelSteam[]
      */
     protected static function getSteamItemsFromPartnerID($partner_id, $game_id, $game_context)
     {
@@ -48,7 +48,7 @@ class Inventory
      * @param $steam_id string
      * @param $game_id string
      * @param $game_context string
-     * @return SteamItemModel[]
+     * @return ItemModelSteam[]
      */
     protected static function getSteamItemsFromSteamID($steam_id, $game_id, $game_context)
     {
@@ -76,13 +76,13 @@ class Inventory
 
     /**
      * @param $inventory SteamInventoryModel
-     * @return SteamItemModel[]
+     * @return ItemModelSteam[]
      */
     private static function getSteamItemsFromInventory($inventory)
     {
         $steam_items = [];
         foreach ($inventory->assets as $asset) {
-            $steam_item = new SteamItemModel();
+            $steam_item = new ItemModelSteam();
             $steam_item->assetid = $asset->assetid;
             foreach ($inventory->descriptions as $description) {
                 if ($asset->classid === $description->classid && $asset->instanceid === $description->instanceid) {

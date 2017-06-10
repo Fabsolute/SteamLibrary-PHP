@@ -6,10 +6,10 @@
  * Time: 11:36
  */
 
-namespace Fabs\SteamLibrary\Model;
+namespace Fabs\SteamLibrary\Model\Item;
 
 
-class SteamItemModel extends SteamAssetModel
+class ItemModelSteam extends SteamAssetModel
 {
     /** @var SteamDescriptionModel */
     public $description;
