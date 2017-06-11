@@ -67,7 +67,7 @@ class TradeOfferHandler
     {
         $trade_offer = $this->getTradeOffer($trade_offer_id);
         if ($trade_offer != null && $trade_offer->offer != null) {
-            return $this->getTradeOfferState($trade_offer->offer->trade_offer_state);
+            return self::getTradeOfferState($trade_offer->offer->trade_offer_state);
         }
         return TradeOfferStates::TradeOfferStateUnknown;
     }
@@ -76,7 +76,7 @@ class TradeOfferHandler
      * @param int $state_number
      * @return string
      */
-    public function getTradeOfferState($state_number)
+    public static function getTradeOfferState($state_number)
     {
         $lookup[1] = TradeOfferStates::TradeOfferStateInvalid;
         $lookup[2] = TradeOfferStates::TradeOfferStateActive;
