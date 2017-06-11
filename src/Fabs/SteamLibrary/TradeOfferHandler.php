@@ -13,7 +13,7 @@ use Fabs\SteamLibrary\Constant\TradeOfferStates;
 use Fabs\SteamLibrary\Model\APIResponseModel;
 use Fabs\SteamLibrary\Model\TradeOffer\TradeOfferResponseModel;
 use Fabs\SteamLibrary\Model\TradeOffer\TradeOffersResponseModel;
-use Fabs\SteamLibrary\Model\TradeOffer\TradeOffersSummary;
+use Fabs\SteamLibrary\Model\TradeOffer\TradeOffersSummaryModel;
 use GuzzleHttp\Client;
 
 class TradeOfferHandler
@@ -144,12 +144,12 @@ class TradeOfferHandler
 
     /**
      * @param string $time_last_visit
-     * @return TradeOffersSummary
+     * @return TradeOffersSummaryModel
      */
     public function getTradeOffersSummary($time_last_visit)
     {
         $response = $this->executeQuery('GetTradeOffersSummary', ['time_last_visit' => $time_last_visit]);
-        return TradeOffersSummary::deserialize($response->response);
+        return TradeOffersSummaryModel::deserialize($response->response);
     }
 
     /**

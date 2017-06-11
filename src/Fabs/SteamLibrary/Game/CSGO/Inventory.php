@@ -14,7 +14,7 @@ class Inventory extends InventoryBase
 
     /**
      * @param string $trade_url
-     * @return \Fabs\SteamLibrary\Model\Item\ItemModelSteam[]
+     * @return \Fabs\SteamLibrary\Model\Item\ItemModel[]
      */
     public function getItemsFromTradeURL($trade_url)
     {
@@ -28,7 +28,7 @@ class Inventory extends InventoryBase
 
     /**
      * @param $partner_id string|int
-     * @return \Fabs\SteamLibrary\Model\Item\ItemModelSteam[]
+     * @return \Fabs\SteamLibrary\Model\Item\ItemModel[]
      */
     public static function getItemsFromPartnerID($partner_id)
     {
@@ -37,7 +37,7 @@ class Inventory extends InventoryBase
 
     /**
      * @param $steam_id string
-     * @return \Fabs\SteamLibrary\Model\Item\ItemModelSteam[]
+     * @return \Fabs\SteamLibrary\Model\Item\ItemModel[]
      */
     public static function getItemsFromSteamID($steam_id)
     {

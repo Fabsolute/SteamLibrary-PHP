@@ -11,7 +11,7 @@ namespace Fabs\SteamLibrary\Model\TradeOffer;
 
 use Fabs\Serialize\SerializableObject;
 
-class TradeOffersSummary extends SerializableObject
+class TradeOffersSummaryModel extends SerializableObject
 {
     /** @var int */
     public $pending_received_count = 0;

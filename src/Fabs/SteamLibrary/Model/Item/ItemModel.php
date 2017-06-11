@@ -9,7 +9,7 @@
 namespace Fabs\SteamLibrary\Model\Item;
 
 
-class ItemModelSteam extends SteamAssetModel
+class ItemModel extends SteamAssetModel
 {
     /** @var SteamDescriptionModel */
     public $description;
