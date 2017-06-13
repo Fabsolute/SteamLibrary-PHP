@@ -16,7 +16,7 @@ class Inventory extends InventoryBase
      * @param string $trade_url
      * @return \Fabs\SteamLibrary\Model\Item\ItemModel[]
      */
-    public function getItemsFromTradeURL($trade_url)
+    public static function getItemsFromTradeURL($trade_url)
     {
         $partner_id = (new SteamTradeURLHandler())
             ->setFullURL($trade_url)
