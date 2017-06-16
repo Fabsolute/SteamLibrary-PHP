@@ -93,13 +93,19 @@ class Inventory
             }
             if ($steam_item->description != null) {
                 if ($steam_item->description->icon_url != null) {
-                    $steam_item->description->icon_url = self::BASE_IMAGE_URL
-                        . $steam_item->description->icon_url;
+                    if (strpos($steam_item->description->icon_url, self::BASE_IMAGE_URL) === false)
+                    {
+                        $steam_item->description->icon_url = self::BASE_IMAGE_URL
+                            . $steam_item->description->icon_url;
+                    }
                 }
 
                 if ($steam_item->description->icon_url_large != null) {
-                    $steam_item->description->icon_url_large = self::BASE_IMAGE_URL
-                        . $steam_item->description->icon_url_large;
+                    if (strpos($steam_item->description->icon_url_large, self::BASE_IMAGE_URL) === false)
+                    {
+                        $steam_item->description->icon_url_large = self::BASE_IMAGE_URL
+                            . $steam_item->description->icon_url_large;
+                    }
                 }
 
                 foreach ($steam_item->description->tags as $tag) {
