@@ -184,6 +184,7 @@ class TradeOfferHandler
      * @param $api
      * @param string[] $query_parameters
      * @param string $type
+     * @param array $body
      * @return APIResponseModel
      */
     protected function executeQuery($api, $query_parameters, $type = 'GET', $body = [])
