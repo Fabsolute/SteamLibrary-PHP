@@ -84,6 +84,7 @@ class Inventory
         foreach ($inventory->assets as $asset) {
             $steam_item = new ItemModel();
             $steam_item->assetid = $asset->assetid;
+
             foreach ($inventory->descriptions as $description) {
                 if ($asset->classid === $description->classid && $asset->instanceid === $description->instanceid) {
                     $steam_item->description = $description;
@@ -138,6 +139,13 @@ class Inventory
                                 }
                             }
                         }
+                        break;
+                    }
+                }
+
+                foreach ($steam_item->description->actions as $action) {
+                    if ($action->name === 'Inspect in Game...') {
+                        $steam_item->inspect_in_game_link = $action->link;
                         break;
                     }
                 }

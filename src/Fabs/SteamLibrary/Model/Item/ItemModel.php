@@ -17,6 +17,8 @@ class ItemModel extends SteamAssetModel
     public $type;
     /** @var SteamStickerModel[] */
     public $stickers = [];
+    /** @var string */
+    public $inspect_in_game_link;
 
     public function __construct()
     {
