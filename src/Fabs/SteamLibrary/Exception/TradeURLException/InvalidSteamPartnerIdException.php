@@ -1,7 +1,7 @@
 <?php
 
 
-namespace IRobot\Core\Exception\TradeURLException;
+namespace Fabs\SteamLibrary\Exception\TradeURLException;
 
 
 class InvalidSteamPartnerIdException extends TradeURLException

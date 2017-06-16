@@ -9,11 +9,11 @@
 namespace Fabs\SteamLibrary;
 
 
-use IRobot\Core\Exception\TradeURLException\InvalidSteamPartnerIdException;
-use IRobot\Core\Exception\TradeURLException\InvalidSteamTokenException;
-use IRobot\Core\Exception\TradeURLException\NotASteamTradeURLException;
-use IRobot\Core\Exception\TradeURLException\SteamPartnerIdNotFoundException;
-use IRobot\Core\Exception\TradeURLException\SteamTokenNotFoundException;
+use Fabs\SteamLibrary\Exception\TradeURLException\InvalidSteamPartnerIdException;
+use Fabs\SteamLibrary\Exception\TradeURLException\InvalidSteamTokenException;
+use Fabs\SteamLibrary\Exception\TradeURLException\NotASteamTradeURLException;
+use Fabs\SteamLibrary\Exception\TradeURLException\SteamPartnerIdNotFoundException;
+use Fabs\SteamLibrary\Exception\TradeURLException\SteamTokenNotFoundException;
 
 class SteamTradeURLHandler
 {
@@ -53,7 +53,7 @@ class SteamTradeURLHandler
     {
         if ($this->partner_id != null && $this->token != null)
         {
-            if (!preg_match('/^' . $this->partner_id_regex_base .'$/', $this->partner_id))
+            if (!preg_match('/^' . $this->partner_id_regex_base . '$/', $this->partner_id))
             {
                 throw new InvalidSteamPartnerIdException($this->partner_id);
             }

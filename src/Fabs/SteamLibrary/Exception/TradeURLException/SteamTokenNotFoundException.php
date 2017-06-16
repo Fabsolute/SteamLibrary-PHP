@@ -1,6 +1,6 @@
 <?php
 
-namespace IRobot\Core\Exception\TradeURLException;
+namespace Fabs\SteamLibrary\Exception\TradeURLException;
 
 
 class SteamTokenNotFoundException extends TradeURLException
