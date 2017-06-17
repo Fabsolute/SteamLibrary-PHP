@@ -2,10 +2,12 @@
 
 namespace Fabs\SteamLibrary\Game;
 
+use Fabs\SteamLibrary\Exception\InvalidSteamInventoryException;
 use Fabs\SteamLibrary\Model\Item\SteamInventoryModel;
 use Fabs\SteamLibrary\Model\Item\ItemModel;
 use Fabs\SteamLibrary\Model\Item\SteamStickerModel;
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\RequestException;
 
 class Inventory
 {
@@ -49,17 +51,29 @@ class Inventory
      * @param $game_id string
      * @param $game_context string
      * @return SteamInventoryModel
+     * @throws InvalidSteamInventoryException
      */
     private static function getSteamInventoryFromSteamID($steam_id, $game_id, $game_context)
     {
-        $url = sprintf('https://steamcommunity.com/inventory/%s/%s/%s',
-            $steam_id, (string)$game_id, (string)$game_context);
-        $client = new Client();
-        $json_content = $client->get($url)->getBody()->getContents();
-        $content = json_decode($json_content, true);
-        /** @var SteamInventoryModel $object */
-        $object = SteamInventoryModel::deserialize($content);
-        return $object;
+        try
+        {
+            $url = sprintf('https://steamcommunity.com/inventory/%s/%s/%s',
+                $steam_id, (string)$game_id, (string)$game_context);
+            $client = new Client();
+            $json_content = $client->get($url)->getBody()->getContents();
+            $content = json_decode($json_content, true);
+            /** @var SteamInventoryModel $object */
+            $object = SteamInventoryModel::deserialize($content);
+            return $object;
+        } catch (RequestException $exception)
+        {
+            if ($exception->getResponse()->getStatusCode() === 403)
+            {
+                throw new InvalidSteamInventoryException($exception->getRequest()->getUri()->getPath());
+            }
+
+            throw $exception;
+        }
     }
 
     /**
@@ -82,13 +96,19 @@ class Inventory
             }
             if ($steam_item->description != null) {
                 if ($steam_item->description->icon_url != null) {
-                    $steam_item->description->icon_url = self::BASE_IMAGE_URL
-                        . $steam_item->description->icon_url;
+                    if (strpos($steam_item->description->icon_url, self::BASE_IMAGE_URL) === false)
+                    {
+                        $steam_item->description->icon_url = self::BASE_IMAGE_URL
+                            . $steam_item->description->icon_url;
+                    }
                 }
 
                 if ($steam_item->description->icon_url_large != null) {
-                    $steam_item->description->icon_url_large = self::BASE_IMAGE_URL
-                        . $steam_item->description->icon_url_large;
+                    if (strpos($steam_item->description->icon_url_large, self::BASE_IMAGE_URL) === false)
+                    {
+                        $steam_item->description->icon_url_large = self::BASE_IMAGE_URL
+                            . $steam_item->description->icon_url_large;
+                    }
                 }
 
                 foreach ($steam_item->description->tags as $tag) {
