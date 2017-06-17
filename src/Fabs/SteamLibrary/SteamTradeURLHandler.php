@@ -28,7 +28,7 @@ class SteamTradeURLHandler
     private $prefix = '/new/?';
     private $partner_id_regex_base = '[0-9]*';
     private $partner_id_regex;
-    private $token_regex_base = '[a-zA-Z0-9_-]*';
+    private $token_regex_base = '[a-zA-Z0-9_-]{8}';
     private $token_regex;
 
     function __construct()
