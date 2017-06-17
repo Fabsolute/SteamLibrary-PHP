@@ -2,10 +2,12 @@
 
 namespace Fabs\SteamLibrary\Game;
 
+use Fabs\SteamLibrary\Exception\InvalidSteamInventoryException;
 use Fabs\SteamLibrary\Model\Item\SteamInventoryModel;
 use Fabs\SteamLibrary\Model\Item\ItemModel;
 use Fabs\SteamLibrary\Model\Item\SteamStickerModel;
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\RequestException;
 
 class Inventory
 {
@@ -61,17 +63,29 @@ class Inventory
      * @param $game_id string
      * @param $game_context string
      * @return SteamInventoryModel
+     * @throws InvalidSteamInventoryException
      */
     private static function getSteamInventoryFromSteamID($steam_id, $game_id, $game_context)
     {
-        $url = sprintf('https://steamcommunity.com/inventory/%s/%s/%s',
-            $steam_id, (string)$game_id, (string)$game_context);
-        $client = new Client();
-        $json_content = $client->get($url)->getBody()->getContents();
-        $content = json_decode($json_content, true);
-        /** @var SteamInventoryModel $object */
-        $object = SteamInventoryModel::deserialize($content);
-        return $object;
+        try
+        {
+            $url = sprintf('https://steamcommunity.com/inventory/%s/%s/%s',
+                $steam_id, (string)$game_id, (string)$game_context);
+            $client = new Client();
+            $json_content = $client->get($url)->getBody()->getContents();
+            $content = json_decode($json_content, true);
+            /** @var SteamInventoryModel $object */
+            $object = SteamInventoryModel::deserialize($content);
+            return $object;
+        } catch (RequestException $exception)
+        {
+            if ($exception->getResponse()->getStatusCode() === 403)
+            {
+                throw new InvalidSteamInventoryException($exception->getRequest()->getUri()->getPath());
+            }
+
+            throw $exception;
+        }
     }
 
     /**
