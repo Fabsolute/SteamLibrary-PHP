@@ -52,6 +52,8 @@ class SteamDescriptionModel extends SerializableObject
     public $marketable = 0;
     /** @var SteamDescriptionTagModel[] */
     public $tags = [];
+    /** @var string[] */
+    public $fraudwarnings = [];
 
     public function __construct()
     {

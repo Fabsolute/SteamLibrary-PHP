@@ -19,20 +19,8 @@ class Inventory
      */
     protected static function getSteamItemsFromPartnerID($partner_id, $game_id, $game_context)
     {
-        $inventory = self::getSteamInventoryFromPartnerID($partner_id, $game_id, $game_context);
-        return self::getSteamItemsFromInventory($inventory);
-    }
-
-    /**
-     * @param $partner_id string|int
-     * @param $game_id string
-     * @param $game_context string
-     * @return SteamInventoryModel
-     */
-    private static function getSteamInventoryFromPartnerID($partner_id, $game_id, $game_context)
-    {
         $steam_id = self::getSteamIDFromPartnerID($partner_id);
-        return self::getSteamInventoryFromSteamID($steam_id, $game_id, $game_context);
+        return self::getSteamItemsFromSteamID($steam_id, $game_id, $game_context);
     }
 
     /**
@@ -53,7 +41,7 @@ class Inventory
     protected static function getSteamItemsFromSteamID($steam_id, $game_id, $game_context)
     {
         $inventory = self::getSteamInventoryFromSteamID($steam_id, $game_id, $game_context);
-        return self::getSteamItemsFromInventory($inventory);
+        return self::getSteamItemsFromInventory($inventory, $steam_id);
     }
 
     /**
@@ -76,9 +64,10 @@ class Inventory
 
     /**
      * @param $inventory SteamInventoryModel
-     * @return ItemModel[]
+     * @param $owner_steam_id string
+     * @return \Fabs\SteamLibrary\Model\Item\ItemModel[]
      */
-    private static function getSteamItemsFromInventory($inventory)
+    private static function getSteamItemsFromInventory($inventory, $owner_steam_id)
     {
         $steam_items = [];
         foreach ($inventory->assets as $asset) {
@@ -145,8 +134,20 @@ class Inventory
 
                 foreach ($steam_item->description->actions as $action) {
                     if ($action->name === 'Inspect in Game...') {
-                        $steam_item->inspect_in_game_link = $action->link;
+
+                        $steam_item->inspect_in_game_link = str_replace('%owner_steamid%', $owner_steam_id,
+                            str_replace('%assetid%', $steam_item->assetid, $action->link)
+                        );
                         break;
+                    }
+                }
+
+                if ($steam_item->description->fraudwarnings != null) {
+                    foreach ($steam_item->description->fraudwarnings as $fraud_warning) {
+                        if (strpos($fraud_warning, 'Name Tag') !== false) {
+                            $steam_item->name_tag = preg_replace("/Name Tag: ''(.*?)''/", "$1", $fraud_warning);
+                            break;
+                        }
                     }
                 }
             }
