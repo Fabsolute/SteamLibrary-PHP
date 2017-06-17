@@ -55,8 +55,7 @@ class Inventory
      */
     private static function getSteamInventoryFromSteamID($steam_id, $game_id, $game_context)
     {
-        try
-        {
+        try {
             $url = sprintf('https://steamcommunity.com/inventory/%s/%s/%s',
                 $steam_id, (string)$game_id, (string)$game_context);
             $client = new Client();
@@ -65,10 +64,8 @@ class Inventory
             /** @var SteamInventoryModel $object */
             $object = SteamInventoryModel::deserialize($content);
             return $object;
-        } catch (RequestException $exception)
-        {
-            if ($exception->getResponse()->getStatusCode() === 403)
-            {
+        } catch (RequestException $exception) {
+            if ($exception->getResponse()->getStatusCode() === 403) {
                 throw new InvalidSteamInventoryException($exception->getRequest()->getUri()->getPath());
             }
 
@@ -96,16 +93,14 @@ class Inventory
             }
             if ($steam_item->description != null) {
                 if ($steam_item->description->icon_url != null) {
-                    if (strpos($steam_item->description->icon_url, self::BASE_IMAGE_URL) === false)
-                    {
+                    if (strpos($steam_item->description->icon_url, self::BASE_IMAGE_URL) === false) {
                         $steam_item->description->icon_url = self::BASE_IMAGE_URL
                             . $steam_item->description->icon_url;
                     }
                 }
 
                 if ($steam_item->description->icon_url_large != null) {
-                    if (strpos($steam_item->description->icon_url_large, self::BASE_IMAGE_URL) === false)
-                    {
+                    if (strpos($steam_item->description->icon_url_large, self::BASE_IMAGE_URL) === false) {
                         $steam_item->description->icon_url_large = self::BASE_IMAGE_URL
                             . $steam_item->description->icon_url_large;
                     }
@@ -139,7 +134,7 @@ class Inventory
                                             $sticker_image = $sticker_images[$i];
 
                                             $sticker = new SteamStickerModel();
-                                            $sticker->name = $sticker_name;
+                                            $sticker->name = trim($sticker_name);
                                             $sticker->image = $sticker_image;
 
                                             $steam_item->stickers[] = $sticker;
