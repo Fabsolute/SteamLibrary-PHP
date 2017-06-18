@@ -21,20 +21,8 @@ class Inventory
      */
     protected static function getSteamItemsFromPartnerID($partner_id, $game_id, $game_context)
     {
-        $inventory = self::getSteamInventoryFromPartnerID($partner_id, $game_id, $game_context);
-        return self::getSteamItemsFromInventory($inventory);
-    }
-
-    /**
-     * @param $partner_id string|int
-     * @param $game_id string
-     * @param $game_context string
-     * @return SteamInventoryModel
-     */
-    private static function getSteamInventoryFromPartnerID($partner_id, $game_id, $game_context)
-    {
         $steam_id = self::getSteamIDFromPartnerID($partner_id);
-        return self::getSteamInventoryFromSteamID($steam_id, $game_id, $game_context);
+        return self::getSteamItemsFromSteamID($steam_id, $game_id, $game_context);
     }
 
     /**
@@ -55,7 +43,7 @@ class Inventory
     protected static function getSteamItemsFromSteamID($steam_id, $game_id, $game_context)
     {
         $inventory = self::getSteamInventoryFromSteamID($steam_id, $game_id, $game_context);
-        return self::getSteamItemsFromInventory($inventory);
+        return self::getSteamItemsFromInventory($inventory, $steam_id);
     }
 
     /**
@@ -67,8 +55,7 @@ class Inventory
      */
     private static function getSteamInventoryFromSteamID($steam_id, $game_id, $game_context)
     {
-        try
-        {
+        try {
             $url = sprintf('https://steamcommunity.com/inventory/%s/%s/%s',
                 $steam_id, (string)$game_id, (string)$game_context);
             $client = new Client();
@@ -77,10 +64,8 @@ class Inventory
             /** @var SteamInventoryModel $object */
             $object = SteamInventoryModel::deserialize($content);
             return $object;
-        } catch (RequestException $exception)
-        {
-            if ($exception->getResponse()->getStatusCode() === 403)
-            {
+        } catch (RequestException $exception) {
+            if ($exception->getResponse()->getStatusCode() === 403) {
                 throw new InvalidSteamInventoryException($exception->getRequest()->getUri()->getPath());
             }
 
@@ -90,9 +75,10 @@ class Inventory
 
     /**
      * @param $inventory SteamInventoryModel
-     * @return ItemModel[]
+     * @param $owner_steam_id string
+     * @return \Fabs\SteamLibrary\Model\Item\ItemModel[]
      */
-    private static function getSteamItemsFromInventory($inventory)
+    private static function getSteamItemsFromInventory($inventory, $owner_steam_id)
     {
         $steam_items = [];
         foreach ($inventory->assets as $asset) {
@@ -107,16 +93,14 @@ class Inventory
             }
             if ($steam_item->description != null) {
                 if ($steam_item->description->icon_url != null) {
-                    if (strpos($steam_item->description->icon_url, self::BASE_IMAGE_URL) === false)
-                    {
+                    if (strpos($steam_item->description->icon_url, self::BASE_IMAGE_URL) === false) {
                         $steam_item->description->icon_url = self::BASE_IMAGE_URL
                             . $steam_item->description->icon_url;
                     }
                 }
 
                 if ($steam_item->description->icon_url_large != null) {
-                    if (strpos($steam_item->description->icon_url_large, self::BASE_IMAGE_URL) === false)
-                    {
+                    if (strpos($steam_item->description->icon_url_large, self::BASE_IMAGE_URL) === false) {
                         $steam_item->description->icon_url_large = self::BASE_IMAGE_URL
                             . $steam_item->description->icon_url_large;
                     }
@@ -150,7 +134,7 @@ class Inventory
                                             $sticker_image = $sticker_images[$i];
 
                                             $sticker = new SteamStickerModel();
-                                            $sticker->name = $sticker_name;
+                                            $sticker->name = trim($sticker_name);
                                             $sticker->image = $sticker_image;
 
                                             $steam_item->stickers[] = $sticker;
@@ -165,8 +149,20 @@ class Inventory
 
                 foreach ($steam_item->description->actions as $action) {
                     if ($action->name === 'Inspect in Game...') {
-                        $steam_item->inspect_in_game_link = $action->link;
+
+                        $steam_item->inspect_in_game_link = str_replace('%owner_steamid%', $owner_steam_id,
+                            str_replace('%assetid%', $steam_item->assetid, $action->link)
+                        );
                         break;
+                    }
+                }
+
+                if ($steam_item->description->fraudwarnings != null) {
+                    foreach ($steam_item->description->fraudwarnings as $fraud_warning) {
+                        if (strpos($fraud_warning, 'Name Tag') !== false) {
+                            $steam_item->name_tag = preg_replace("/Name Tag: ''(.*?)''/", "$1", $fraud_warning);
+                            break;
+                        }
                     }
                 }
             }
