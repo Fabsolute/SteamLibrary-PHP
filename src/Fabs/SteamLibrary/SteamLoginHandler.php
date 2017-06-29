@@ -9,8 +9,10 @@ class SteamLoginHandler
 {
     const STEAM_OPENID_URL = 'http://steamcommunity.com/openid';
 
-    /** @var  SteamLoginConfig */
-    private $steam_login_config;
+    /** @var  string */
+    private $host;
+    /** @var  string */
+    private $return_url;
     /** @var  LightOpenID */
     private $openid;
     /** @var  bool|null */
@@ -18,19 +20,13 @@ class SteamLoginHandler
 
     /**
      * SteamLoginHandler constructor.
-     * @param SteamLoginConfig $steam_login_config
+     * @param string $host
+     * @param string $return_url
      */
-    public function __construct($steam_login_config)
+    public function __construct($host, $return_url)
     {
-        $this->steam_login_config = $steam_login_config;
-    }
-
-    /**
-     * @return SteamLoginConfig
-     */
-    public function getSteamLoginConfig()
-    {
-        return $this->steam_login_config;
+        $this->host = $host;
+        $this->return_url = $return_url;
     }
 
     /**
@@ -40,8 +36,8 @@ class SteamLoginHandler
     {
         if ($this->openid === null)
         {
-            $this->openid = new LightOpenID($this->steam_login_config->getHost());
-            $this->openid->returnUrl = $this->steam_login_config->getReturnUrl();
+            $this->openid = new LightOpenID($this->host);
+            $this->openid->returnUrl = $this->return_url;
             $this->openid->identity = self::STEAM_OPENID_URL;
         }
         return $this->openid;
@@ -69,7 +65,7 @@ class SteamLoginHandler
     }
 
     /**
-     * @return int
+     * @return string|null
      */
     public function getSteamId()
     {
@@ -81,9 +77,10 @@ class SteamLoginHandler
             preg_match($pattern, $identity, $matches);
             $steam_id = $matches['steam_id'];
             return $steam_id;
-        } else
+        }
+        else
         {
-            return 0;
+            return null;
         }
     }
 }
