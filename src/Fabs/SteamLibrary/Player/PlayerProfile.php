@@ -41,10 +41,17 @@ class PlayerProfile
     /**
      * @param string $steam_api_key
      * @param string $user_steam_id
-     * @return PlayerProfileModel
+     * @return PlayerProfileModel|null
      */
     public static function getUserProfile($steam_api_key, $user_steam_id)
     {
-        return self::getUserProfiles($steam_api_key, [$user_steam_id])[$user_steam_id];
+        $player_profiles = self::getUserProfiles($steam_api_key, [$user_steam_id]);
+        if (array_key_exists($user_steam_id, $player_profiles))
+        {
+            return $player_profiles[$user_steam_id];
+        } else
+        {
+            return null;
+        }
     }
 }
