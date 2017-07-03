@@ -69,6 +69,7 @@ class PlayerProfile
 
     /**
      * @param string $trade_url
+     * @return string
      */
     public static function getUserProfileURLFromTradeURL($trade_url)
     {
@@ -77,7 +78,7 @@ class PlayerProfile
             ->decompose()
             ->getPartnerId();
 
-        self::getUserProfileURLFromPartnerId($partner_id);
+        return self::getUserProfileURLFromPartnerId($partner_id);
     }
 
     
