@@ -6,6 +6,7 @@ use Fabs\SteamLibrary\Constant\ISteamUser;
 use Fabs\SteamLibrary\Model\APIResponseModel;
 use Fabs\SteamLibrary\Model\Player\PlayerProfileModel;
 use Fabs\SteamLibrary\Model\Player\PlayerProfilesModel;
+use Fabs\SteamLibrary\SteamTradeURLHandler;
 use GuzzleHttp\Client;
 
 class PlayerProfile
@@ -53,5 +54,51 @@ class PlayerProfile
         {
             return null;
         }
+    }
+
+
+    /**
+     * @param $partner_id string|int
+     * @return string
+     */
+    public static function getSteamIDFromPartnerID($partner_id)
+    {
+        return '765' . (intval($partner_id) + 61197960265728);
+    }
+
+
+    /**
+     * @param string $trade_url
+     */
+    public static function getUserProfileURLFromTradeURL($trade_url)
+    {
+        $partner_id = (new SteamTradeURLHandler())
+            ->setFullURL($trade_url)
+            ->decompose()
+            ->getPartnerId();
+
+        self::getUserProfileURLFromPartnerId($partner_id);
+    }
+
+    
+    /**
+     * @param string $partner_id
+     * @return string
+     */
+    public static function getUserProfileURLFromPartnerId($partner_id)
+    {
+        $steam_id = self::getSteamIDFromPartnerID($partner_id);
+        return self::getUserProfileURLFromSteamId($steam_id);
+    }
+
+
+    /**
+     * @param string $steam_id
+     * @return string
+     */
+    public static function getUserProfileURLFromSteamId($steam_id)
+    {
+        $base_url = 'http://steamcommunity.com/profiles/';
+        return $base_url . $steam_id;
     }
 }
