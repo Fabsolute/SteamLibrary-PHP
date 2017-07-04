@@ -68,6 +68,16 @@ class PlayerProfile
 
 
     /**
+     * @param string $steam_id
+     * @return string
+     */
+    public static function getPartnerIDFromSteamID($steam_id)
+    {
+        return strval(intval(substr($steam_id, 3)) - 61197960265728);
+    }
+
+
+    /**
      * @param string $trade_url
      * @return string
      */
