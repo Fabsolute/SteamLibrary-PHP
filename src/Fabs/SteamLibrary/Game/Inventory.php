@@ -6,6 +6,7 @@ use Fabs\SteamLibrary\Exception\InvalidSteamInventoryException;
 use Fabs\SteamLibrary\Model\Item\SteamInventoryModel;
 use Fabs\SteamLibrary\Model\Item\ItemModel;
 use Fabs\SteamLibrary\Model\Item\SteamStickerModel;
+use Fabs\SteamLibrary\Player\PlayerProfile;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
 
@@ -21,18 +22,10 @@ class Inventory
      */
     protected static function getSteamItemsFromPartnerID($partner_id, $game_id, $game_context)
     {
-        $steam_id = self::getSteamIDFromPartnerID($partner_id);
+        $steam_id = PlayerProfile::getSteamIDFromPartnerID($partner_id);
         return self::getSteamItemsFromSteamID($steam_id, $game_id, $game_context);
     }
 
-    /**
-     * @param $partner_id string|int
-     * @return string
-     */
-    public static function getSteamIDFromPartnerID($partner_id)
-    {
-        return '765' . (intval($partner_id) + 61197960265728);
-    }
 
     /**
      * @param $steam_id string
