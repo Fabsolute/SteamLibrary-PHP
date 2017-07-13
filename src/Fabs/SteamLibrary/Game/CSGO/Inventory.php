@@ -11,6 +11,7 @@ class Inventory extends InventoryBase
 {
     const GameID = "730";
     const ContextID = "2";
+    public static $CSGOFloatAPIURL = 'https://api.csgofloat.com:1738';
 
     /**
      * @param string $trade_url
@@ -50,7 +51,7 @@ class Inventory extends InventoryBase
      */
     public static function getItemInfoFromInspectLink($inspect_in_game_link)
     {
-        $url = sprintf('https://api.csgofloat.com:1738/?url=%s', $inspect_in_game_link);
+        $url = sprintf('%s/?url=%s', self::$CSGOFloatAPIURL, $inspect_in_game_link);
         $client = new Client();
         $json_content = $client->get($url)->getBody()->getContents();
         $content = json_decode($json_content, true);
