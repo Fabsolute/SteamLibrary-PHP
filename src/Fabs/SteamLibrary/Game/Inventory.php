@@ -2,6 +2,7 @@
 
 namespace Fabs\SteamLibrary\Game;
 
+use Fabs\SteamLibrary\Exception\GeneralSteamException;
 use Fabs\SteamLibrary\Exception\InvalidSteamInventoryException;
 use Fabs\SteamLibrary\Model\Item\SteamInventoryModel;
 use Fabs\SteamLibrary\Model\Item\ItemModel;
@@ -19,6 +20,8 @@ class Inventory
      * @param $game_id string
      * @param $game_context string
      * @return ItemModel[]
+     * @throws GeneralSteamException
+     * @throws InvalidSteamInventoryException
      */
     protected static function getSteamItemsFromPartnerID($partner_id, $game_id, $game_context)
     {
@@ -32,6 +35,8 @@ class Inventory
      * @param $game_id string
      * @param $game_context string
      * @return ItemModel[]
+     * @throws GeneralSteamException
+     * @throws InvalidSteamInventoryException
      */
     protected static function getSteamItemsFromSteamID($steam_id, $game_id, $game_context)
     {
@@ -44,6 +49,7 @@ class Inventory
      * @param $game_id string
      * @param $game_context string
      * @return SteamInventoryModel
+     * @throws GeneralSteamException
      * @throws InvalidSteamInventoryException
      */
     private static function getSteamInventoryFromSteamID($steam_id, $game_id, $game_context)
@@ -58,8 +64,17 @@ class Inventory
             $object = SteamInventoryModel::deserialize($content);
             return $object;
         } catch (RequestException $exception) {
-            if ($exception->getResponse()->getStatusCode() === 403) {
-                throw new InvalidSteamInventoryException($exception->getRequest()->getUri()->getPath());
+            if ($exception->getResponse() !== null) {
+                switch ($exception->getResponse()->getStatusCode()) {
+                    case 403:
+                        throw new InvalidSteamInventoryException($exception->getRequest()->getUri()->getPath());
+                        break;
+                    case 500:
+                        throw new GeneralSteamException($exception->getRequest()->getUri()->getPath());
+                        break;
+                    default:
+                        break;
+                }
             }
 
             throw $exception;
