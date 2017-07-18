@@ -4,6 +4,7 @@ namespace Fabs\SteamLibrary\Game;
 
 use Fabs\SteamLibrary\Exception\GeneralSteamException;
 use Fabs\SteamLibrary\Exception\InvalidSteamInventoryException;
+use Fabs\SteamLibrary\Exception\TooManyRequestException;
 use Fabs\SteamLibrary\Model\Item\SteamInventoryModel;
 use Fabs\SteamLibrary\Model\Item\ItemModel;
 use Fabs\SteamLibrary\Model\Item\SteamStickerModel;
@@ -22,6 +23,7 @@ class Inventory
      * @return ItemModel[]
      * @throws GeneralSteamException
      * @throws InvalidSteamInventoryException
+     * @throws TooManyRequestException
      */
     protected static function getSteamItemsFromPartnerID($partner_id, $game_id, $game_context)
     {
@@ -37,6 +39,7 @@ class Inventory
      * @return ItemModel[]
      * @throws GeneralSteamException
      * @throws InvalidSteamInventoryException
+     * @throws TooManyRequestException
      */
     protected static function getSteamItemsFromSteamID($steam_id, $game_id, $game_context)
     {
@@ -51,6 +54,7 @@ class Inventory
      * @return SteamInventoryModel
      * @throws GeneralSteamException
      * @throws InvalidSteamInventoryException
+     * @throws TooManyRequestException
      */
     private static function getSteamInventoryFromSteamID($steam_id, $game_id, $game_context)
     {
@@ -67,11 +71,12 @@ class Inventory
             if ($exception->getResponse() !== null) {
                 switch ($exception->getResponse()->getStatusCode()) {
                     case 403:
+                    case 404:
                         throw new InvalidSteamInventoryException($exception->getRequest()->getUri()->getPath());
-                        break;
+                    case 429:
+                        throw new TooManyRequestException($exception->getRequest()->getUri()->getPath());
                     case 500:
                         throw new GeneralSteamException($exception->getRequest()->getUri()->getPath());
-                        break;
                     default:
                         break;
                 }

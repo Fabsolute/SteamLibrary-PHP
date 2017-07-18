@@ -4,6 +4,7 @@ namespace Fabs\SteamLibrary\Game\CSGO;
 
 use Fabs\SteamLibrary\Exception\GeneralSteamException;
 use Fabs\SteamLibrary\Exception\InvalidSteamInventoryException;
+use Fabs\SteamLibrary\Exception\TooManyRequestException;
 use Fabs\SteamLibrary\Game\Inventory as InventoryBase;
 use Fabs\SteamLibrary\Model\Item\CSGO\CSGOFloatAPIModel;
 use Fabs\SteamLibrary\SteamTradeURLHandler;
@@ -20,6 +21,7 @@ class Inventory extends InventoryBase
      * @return \Fabs\SteamLibrary\Model\Item\ItemModel[]
      * @throws GeneralSteamException
      * @throws InvalidSteamInventoryException
+     * @throws TooManyRequestException
      */
     public static function getItemsFromTradeURL($trade_url)
     {
@@ -36,6 +38,7 @@ class Inventory extends InventoryBase
      * @return \Fabs\SteamLibrary\Model\Item\ItemModel[]
      * @throws GeneralSteamException
      * @throws InvalidSteamInventoryException
+     * @throws TooManyRequestException
      */
     public static function getItemsFromPartnerID($partner_id)
     {
@@ -47,6 +50,7 @@ class Inventory extends InventoryBase
      * @return \Fabs\SteamLibrary\Model\Item\ItemModel[]
      * @throws GeneralSteamException
      * @throws InvalidSteamInventoryException
+     * @throws TooManyRequestException
      */
     public static function getItemsFromSteamID($steam_id)
     {
