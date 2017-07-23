@@ -14,7 +14,7 @@ use GuzzleHttp\Exception\RequestException;
 
 class Inventory
 {
-    const BASE_IMAGE_URL = 'http://cdn.steamcommunity.com/economy/image/';
+    const BASE_IMAGE_URL = 'https://steamcommunity-a.akamaihd.net/economy/image/';
 
     /**
      * @param $partner_id string|int
