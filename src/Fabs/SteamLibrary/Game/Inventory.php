@@ -14,6 +14,9 @@ use GuzzleHttp\Exception\RequestException;
 
 class Inventory
 {
+    /** @var string */
+    public static $proxy_url = null;
+
     const BASE_IMAGE_URL = 'https://steamcommunity-a.akamaihd.net/economy/image/';
 
     /**
@@ -59,9 +62,16 @@ class Inventory
     private static function getSteamInventoryFromSteamID($steam_id, $game_id, $game_context)
     {
         try {
+
             $url = sprintf('https://steamcommunity.com/inventory/%s/%s/%s',
                 $steam_id, (string)$game_id, (string)$game_context);
-            $client = new Client();
+
+            $config = [];
+            if (self::$proxy_url !== null) {
+                $config['proxy'] = self::$proxy_url;
+            }
+
+            $client = new Client($config);
             $json_content = $client->get($url)->getBody()->getContents();
             $content = json_decode($json_content, true);
             /** @var SteamInventoryModel $object */
