@@ -6,7 +6,7 @@
  * Time: 18:47
  */
 
-namespace Fabs\SteamLibrary\Model;
+namespace Fabs\SteamLibrary\Model\Item;
 
 use Fabs\Serialize\SerializableObject;
 
@@ -52,6 +52,8 @@ class SteamDescriptionModel extends SerializableObject
     public $marketable = 0;
     /** @var SteamDescriptionTagModel[] */
     public $tags = [];
+    /** @var string[] */
+    public $fraudwarnings = [];
 
     public function __construct()
     {

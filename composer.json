@@ -18,7 +18,8 @@
   "require": {
     "php": "^7.0",
     "guzzlehttp/guzzle": "~6.0",
-    "fabs/serialize": "dev-develop"
+    "fabs/serialize": "dev-develop",
+    "iignatov/lightopenid": "*"
   },
   "autoload": {
     "psr-0": {

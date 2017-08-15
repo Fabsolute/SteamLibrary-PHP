@@ -6,7 +6,7 @@
  * Time: 18:48
  */
 
-namespace Fabs\SteamLibrary\Model;
+namespace Fabs\SteamLibrary\Model\Item;
 
 use Fabs\Serialize\SerializableObject;
 
@@ -20,4 +20,6 @@ class SteamDescriptionTagModel extends SerializableObject
     public $localized_category_name = null;
     /** @var string */
     public $localized_tag_name = null;
+    /** @var string */
+    public $color = null;
 }
