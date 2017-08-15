@@ -141,7 +141,9 @@ class Inventory
                 foreach ($steam_item->description->tags as $tag) {
                     if ($tag->category == 'Type') {
                         $steam_item->type = $tag->internal_name;
-                        break;
+                    } elseif ($tag->category === 'Rarity') {
+                        $steam_item->rarity_color = $tag->color;
+                        $steam_item->rarity_name = $tag->internal_name;
                     }
                 }
 

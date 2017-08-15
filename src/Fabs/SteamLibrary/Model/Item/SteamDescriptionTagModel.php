@@ -20,4 +20,6 @@ class SteamDescriptionTagModel extends SerializableObject
     public $localized_category_name = null;
     /** @var string */
     public $localized_tag_name = null;
+    /** @var string */
+    public $color = null;
 }

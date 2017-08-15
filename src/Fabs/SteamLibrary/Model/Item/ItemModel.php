@@ -21,6 +21,10 @@ class ItemModel extends SteamAssetModel
     public $inspect_in_game_link;
     /** @var string */
     public $name_tag = null;
+    /** @var string */
+    public $rarity_name = null;
+    /** @var string */
+    public $rarity_color = null;
 
     public function __construct()
     {
