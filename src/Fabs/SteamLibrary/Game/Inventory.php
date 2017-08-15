@@ -144,6 +144,8 @@ class Inventory
                     } elseif ($tag->category === 'Rarity') {
                         $steam_item->rarity_color = $tag->color;
                         $steam_item->rarity_name = $tag->internal_name;
+                    } elseif ($tag->category === 'Exterior') {
+                        $steam_item->exterior = $tag->internal_name;
                     }
                 }
 

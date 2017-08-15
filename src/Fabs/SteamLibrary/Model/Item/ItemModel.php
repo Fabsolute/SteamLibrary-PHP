@@ -15,6 +15,8 @@ class ItemModel extends SteamAssetModel
     public $description;
     /** @var string */
     public $type;
+    /** @var string */
+    public $exterior = null;
     /** @var SteamStickerModel[] */
     public $stickers = [];
     /** @var string */
