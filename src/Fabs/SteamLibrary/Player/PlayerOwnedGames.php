@@ -38,6 +38,12 @@ class PlayerOwnedGames
     }
 
 
+    /**
+     * @param string $api_key
+     * @param string $steam_id
+     * @return float|int
+     * @author necipallef <necipallef@gmail.com>
+     */
     public static function getPlayerCSGOTotalPlayTimeHours($api_key, $steam_id)
     {
         $player_owned_games_model = self::getAllGames($api_key, $steam_id);
