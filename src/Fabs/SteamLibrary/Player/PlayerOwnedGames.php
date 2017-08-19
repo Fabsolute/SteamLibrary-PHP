@@ -22,7 +22,7 @@ class PlayerOwnedGames
      */
     public static function getAllGames($api_key, $steam_id, $format = 'json')
     {
-        $api_url = sprintf('%s?key=%s&steam_id=%s&format=%s',
+        $api_url = sprintf('%s?key=%s&steamid=%s&format=%s',
             IPlayerService::GET_OWNED_GAMES_URL,
             $api_key,
             $steam_id,
