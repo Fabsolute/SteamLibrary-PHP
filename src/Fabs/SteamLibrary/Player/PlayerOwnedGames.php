@@ -17,7 +17,7 @@ class PlayerOwnedGames
      * @param string $api_key
      * @param string $steam_id
      * @param string $format
-     * @return PlayerOwnedGamesModel
+     * @return PlayerOwnedGamesModel|null
      * @author necipallef <necipallef@gmail.com>
      */
     public static function getAllGames($api_key, $steam_id, $format = 'json')
@@ -47,6 +47,9 @@ class PlayerOwnedGames
     public static function getPlayerCSGOTotalPlayTimeHours($api_key, $steam_id)
     {
         $player_owned_games_model = self::getAllGames($api_key, $steam_id);
+        if ($player_owned_games_model === null){
+            return 0;
+        }
         foreach ($player_owned_games_model->games as $game_model){
             if ($game_model->appid === intval(Inventory::GameID)){
                 return $game_model->playtime_forever / 60;
