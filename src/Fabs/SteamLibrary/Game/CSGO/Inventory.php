@@ -64,7 +64,7 @@ class Inventory extends InventoryBase
     public static function getItemInfoFromInspectLink($inspect_in_game_link)
     {
         $url = sprintf('%s/?url=%s', self::$CSGOFloatAPIURL, $inspect_in_game_link);
-        $content = SteamRequest::get($url);
+        $content = SteamRequest::get($url, true);
         /** @var CSGOFloatAPIModel $float_api */
         $float_api = CSGOFloatAPIModel::deserialize($content);
         return $float_api->iteminfo;
