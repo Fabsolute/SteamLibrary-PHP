@@ -9,19 +9,11 @@ use Fabs\SteamLibrary\Model\Item\SteamInventoryModel;
 use Fabs\SteamLibrary\Model\Item\ItemModel;
 use Fabs\SteamLibrary\Model\Item\SteamStickerModel;
 use Fabs\SteamLibrary\Player\PlayerProfile;
-use GuzzleHttp\Client;
+use Fabs\SteamLibrary\SteamRequest;
 use GuzzleHttp\Exception\RequestException;
 
 class Inventory
 {
-    /** @var string */
-    public static $proxy_url = null;
-    /** @var int */
-    public static $proxy_port = 0;
-    /** @var string */
-    public static $proxy_username_password = null;
-
-    const BASE_IMAGE_URL = 'https://steamcommunity-a.akamaihd.net/economy/image/';
 
     /**
      * @param $partner_id string|int
@@ -69,20 +61,7 @@ class Inventory
 
             $url = sprintf('https://steamcommunity.com/inventory/%s/%s/%s',
                 $steam_id, (string)$game_id, (string)$game_context);
-
-            $config = [];
-            if (self::$proxy_url !== null) {
-                $config['curl'] = [
-                    CURLOPT_PROXY => self::$proxy_url,
-                    CURLOPT_PROXYPORT => self::$proxy_port,
-                    CURLOPT_PROXYUSERPWD => self::$proxy_username_password,
-                ];
-                $config['proxy'] = self::$proxy_url;
-            }
-
-            $client = new Client($config);
-            $json_content = $client->get($url)->getBody()->getContents();
-            $content = json_decode($json_content, true);
+            $content = SteamRequest::get($url);
             /** @var SteamInventoryModel $object */
             $object = SteamInventoryModel::deserialize($content);
             return $object;
@@ -125,15 +104,15 @@ class Inventory
             }
             if ($steam_item->description != null) {
                 if ($steam_item->description->icon_url != null) {
-                    if (strpos($steam_item->description->icon_url, self::BASE_IMAGE_URL) === false) {
-                        $steam_item->description->icon_url = self::BASE_IMAGE_URL
+                    if (strpos($steam_item->description->icon_url, SteamRequest::BASE_IMAGE_URL) === false) {
+                        $steam_item->description->icon_url = SteamRequest::BASE_IMAGE_URL
                             . $steam_item->description->icon_url;
                     }
                 }
 
                 if ($steam_item->description->icon_url_large != null) {
-                    if (strpos($steam_item->description->icon_url_large, self::BASE_IMAGE_URL) === false) {
-                        $steam_item->description->icon_url_large = self::BASE_IMAGE_URL
+                    if (strpos($steam_item->description->icon_url_large, SteamRequest::BASE_IMAGE_URL) === false) {
+                        $steam_item->description->icon_url_large = SteamRequest::BASE_IMAGE_URL
                             . $steam_item->description->icon_url_large;
                     }
                 }
