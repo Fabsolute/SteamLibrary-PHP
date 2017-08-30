@@ -48,11 +48,12 @@ class SteamRequest
 
     /**
      * @param string $url
+     * @param mixed $body
      * @param bool $do_not_proxy
      * @return mixed
      * @author necipallef <necipallef@gmail.com>
      */
-    public static function post($url, $do_not_proxy = false)
+    public static function post($url, $body, $do_not_proxy = false)
     {
 
         $config = [];
@@ -69,7 +70,7 @@ class SteamRequest
         }
 
         $client = new Client($config);
-        $json_content = $client->post($url)->getBody()->getContents();
+        $json_content = $client->post($url, $body)->getBody()->getContents();
         return json_decode($json_content, true);
     }
 }
