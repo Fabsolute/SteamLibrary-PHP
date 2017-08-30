@@ -193,7 +193,14 @@ class TradeOfferHandler
         $query = http_build_query($parameters, null, '&');
 
         $url = sprintf('%s/%s/v1/?%s', self::BaseAPIURL, $api, $query);
-        $content = SteamRequest::post($url);
+        if ($type === 'GET') {
+            $content = SteamRequest::get($url);
+        } elseif ($type === 'POST') {
+            $content = SteamRequest::post($url, $body);
+        } else {
+            return null;
+        }
+
         /** @var APIResponseModel $response_model */
         $response_model = APIResponseModel::deserialize($content);
         return $response_model;
