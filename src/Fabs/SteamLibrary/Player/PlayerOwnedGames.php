@@ -8,7 +8,7 @@ use Fabs\SteamLibrary\Constant\IPlayerService;
 use Fabs\SteamLibrary\Game\CSGO\Inventory;
 use Fabs\SteamLibrary\Model\APIResponseModel;
 use Fabs\SteamLibrary\Model\Player\PlayerOwnedGamesModel;
-use GuzzleHttp\Client;
+use Fabs\SteamLibrary\SteamRequest;
 
 class PlayerOwnedGames
 {
@@ -28,10 +28,8 @@ class PlayerOwnedGames
             $steam_id,
             $format);
 
-        $guzzle_client = new Client();
-        $response = $guzzle_client->get($api_url)->getBody()->getContents();
-        /** @var APIResponseModel $response_model */
-        $response_model = APIResponseModel::deserialize(json_decode($response, true));
+        $content = SteamRequest::get($api_url);
+        $response_model = APIResponseModel::deserialize($content);
         /** @var PlayerOwnedGamesModel $player_owned_games_model */
         $player_owned_games_model = PlayerOwnedGamesModel::deserialize($response_model->response);
         return $player_owned_games_model;

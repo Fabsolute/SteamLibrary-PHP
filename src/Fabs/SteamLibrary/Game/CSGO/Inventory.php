@@ -7,8 +7,8 @@ use Fabs\SteamLibrary\Exception\InvalidSteamInventoryException;
 use Fabs\SteamLibrary\Exception\TooManyRequestException;
 use Fabs\SteamLibrary\Game\Inventory as InventoryBase;
 use Fabs\SteamLibrary\Model\Item\CSGO\CSGOFloatAPIModel;
+use Fabs\SteamLibrary\SteamRequest;
 use Fabs\SteamLibrary\SteamTradeURLHandler;
-use GuzzleHttp\Client;
 
 class Inventory extends InventoryBase
 {
@@ -64,9 +64,7 @@ class Inventory extends InventoryBase
     public static function getItemInfoFromInspectLink($inspect_in_game_link)
     {
         $url = sprintf('%s/?url=%s', self::$CSGOFloatAPIURL, $inspect_in_game_link);
-        $client = new Client();
-        $json_content = $client->get($url)->getBody()->getContents();
-        $content = json_decode($json_content, true);
+        $content = SteamRequest::get($url);
         /** @var CSGOFloatAPIModel $float_api */
         $float_api = CSGOFloatAPIModel::deserialize($content);
         return $float_api->iteminfo;
