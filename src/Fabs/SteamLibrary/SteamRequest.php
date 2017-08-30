@@ -20,20 +20,24 @@ class SteamRequest
 
     /**
      * @param string $url
+     * @param bool $do_not_proxy
      * @return mixed
      * @author necipallef <necipallef@gmail.com>
      */
-    public static function get($url)
+    public static function get($url, $do_not_proxy = false)
     {
 
         $config = [];
-        if (self::$proxy_url !== null) {
-            $config['curl'] = [
-                CURLOPT_PROXY => self::$proxy_url,
-                CURLOPT_PROXYPORT => self::$proxy_port,
-                CURLOPT_PROXYUSERPWD => self::$proxy_username_password,
-            ];
-            $config['proxy'] = self::$proxy_url;
+        if ($do_not_proxy !== true) {
+            if (self::$proxy_url !== null) {
+                $config['curl'] = [
+                    CURLOPT_PROXY => self::$proxy_url,
+                    CURLOPT_PROXYPORT => self::$proxy_port,
+                    CURLOPT_PROXYUSERPWD => self::$proxy_username_password,
+                ];
+                $config['proxy'] = self::$proxy_url;
+
+            }
         }
 
         $client = new Client($config);
@@ -44,20 +48,24 @@ class SteamRequest
 
     /**
      * @param string $url
+     * @param bool $do_not_proxy
      * @return mixed
      * @author necipallef <necipallef@gmail.com>
      */
-    public static function post($url)
+    public static function post($url, $do_not_proxy = false)
     {
 
         $config = [];
-        if (self::$proxy_url !== null) {
-            $config['curl'] = [
-                CURLOPT_PROXY => self::$proxy_url,
-                CURLOPT_PROXYPORT => self::$proxy_port,
-                CURLOPT_PROXYUSERPWD => self::$proxy_username_password,
-            ];
-            $config['proxy'] = self::$proxy_url;
+        if ($do_not_proxy !== true) {
+            if (self::$proxy_url !== null) {
+                $config['curl'] = [
+                    CURLOPT_PROXY => self::$proxy_url,
+                    CURLOPT_PROXYPORT => self::$proxy_port,
+                    CURLOPT_PROXYUSERPWD => self::$proxy_username_password,
+                ];
+                $config['proxy'] = self::$proxy_url;
+
+            }
         }
 
         $client = new Client($config);
