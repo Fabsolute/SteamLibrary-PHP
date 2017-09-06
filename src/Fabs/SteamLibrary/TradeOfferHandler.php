@@ -14,7 +14,6 @@ use Fabs\SteamLibrary\Model\APIResponseModel;
 use Fabs\SteamLibrary\Model\TradeOffer\TradeOfferResponseModel;
 use Fabs\SteamLibrary\Model\TradeOffer\TradeOffersResponseModel;
 use Fabs\SteamLibrary\Model\TradeOffer\TradeOffersSummaryModel;
-use GuzzleHttp\Client;
 
 class TradeOfferHandler
 {
@@ -194,17 +193,13 @@ class TradeOfferHandler
         $query = http_build_query($parameters, null, '&');
 
         $url = sprintf('%s/%s/v1/?%s', self::BaseAPIURL, $api, $query);
-
-        $client = new Client();
-
         if ($type === 'GET') {
-            $response = $client->get($url);
+            $content = SteamRequest::get($url);
+        } elseif ($type === 'POST') {
+            $content = SteamRequest::post($url, $body);
         } else {
-            $response = $client->post($url, $body);
+            return null;
         }
-
-        $json_content = $response->getBody()->getContents();
-        $content = json_decode($json_content, true);
 
         /** @var APIResponseModel $response_model */
         $response_model = APIResponseModel::deserialize($content);

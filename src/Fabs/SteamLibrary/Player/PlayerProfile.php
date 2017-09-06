@@ -6,8 +6,8 @@ use Fabs\SteamLibrary\Constant\ISteamUser;
 use Fabs\SteamLibrary\Model\APIResponseModel;
 use Fabs\SteamLibrary\Model\Player\PlayerProfileModel;
 use Fabs\SteamLibrary\Model\Player\PlayerProfilesModel;
+use Fabs\SteamLibrary\SteamRequest;
 use Fabs\SteamLibrary\SteamTradeURLHandler;
-use GuzzleHttp\Client;
 
 class PlayerProfile
 {
@@ -24,10 +24,8 @@ class PlayerProfile
             $steam_api_key,
             $user_steam_ids_string);
 
-        $guzzle_client = new Client();
-        $response = $guzzle_client->get($uri)->getBody()->getContents();
-        /** @var APIResponseModel $response_model */
-        $response_model = APIResponseModel::deserialize(json_decode($response, true));
+        $content = SteamRequest::get($uri);
+        $response_model = APIResponseModel::deserialize($content);
         /** @var PlayerProfilesModel $player_profiles_model */
         $player_profiles_model = PlayerProfilesModel::deserialize($response_model->response);
         $player_profile_model_look_up = [];
