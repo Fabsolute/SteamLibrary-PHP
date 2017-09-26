@@ -3,6 +3,9 @@
 namespace Fabs\SteamLibrary\Player;
 
 use Fabs\SteamLibrary\Constant\ISteamUser;
+use Fabs\SteamLibrary\Exception\BadGatewayException;
+use Fabs\SteamLibrary\Exception\GeneralSteamException;
+use Fabs\SteamLibrary\Exception\TooManyRequestException;
 use Fabs\SteamLibrary\Model\APIResponseModel;
 use Fabs\SteamLibrary\Model\Player\PlayerProfileModel;
 use Fabs\SteamLibrary\Model\Player\PlayerProfilesModel;
@@ -14,6 +17,9 @@ class PlayerProfile
     /**
      * @param string $steam_api_key
      * @param string[] $user_steam_ids
+     * @throws BadGatewayException
+     * @throws GeneralSteamException
+     * @throws TooManyRequestException
      * @return PlayerProfileModel[]
      */
     public static function getUserProfiles($steam_api_key, $user_steam_ids)
@@ -40,6 +46,9 @@ class PlayerProfile
     /**
      * @param string $steam_api_key
      * @param string $user_steam_id
+     * @throws BadGatewayException
+     * @throws GeneralSteamException
+     * @throws TooManyRequestException
      * @return PlayerProfileModel|null
      */
     public static function getUserProfile($steam_api_key, $user_steam_id)
