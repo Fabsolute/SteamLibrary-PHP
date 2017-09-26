@@ -56,14 +56,9 @@ class SteamRequest
                 case 429:
                     throw new TooManyRequestException($exception->getRequest()->getUri()->getPath());
                 case 500:
-                    throw new GeneralSteamException($exception->getRequest()->getUri()->getPath());
+                    throw new GeneralSteamException($exception->getRequest(), $exception->getResponse());
                 case 502:
-                    $reason_phrase = $exception->getResponse()->getReasonPhrase();
-                    if ($reason_phrase === null){
-                        $reason_phrase = '';
-                    }
-                    $reason_message = sprintf('body %s, reason %s', $exception->getResponse()->getBody(), $reason_phrase);
-                    throw new BadGatewayException($exception->getRequest()->getUri()->getPath(), $reason_message);
+                    throw new BadGatewayException($exception->getRequest(), $exception->getResponse());
                 default:
                     throw $exception;
             }
