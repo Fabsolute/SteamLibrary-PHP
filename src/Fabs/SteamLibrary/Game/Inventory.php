@@ -74,7 +74,7 @@ class Inventory
                     case 429:
                         throw new TooManyRequestException($exception->getRequest()->getUri()->getPath());
                     case 500:
-                        throw new GeneralSteamException($exception->getRequest()->getUri()->getPath());
+                        throw new GeneralSteamException($exception->getRequest(), $exception->getResponse());
                     default:
                         break;
                 }
