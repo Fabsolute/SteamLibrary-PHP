@@ -1,19 +1,20 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: necipalllef
- * Date: 17/07/2017
- * Time: 13:59
- */
 
 namespace Fabs\SteamLibrary\Exception;
 
 
-class GeneralSteamException extends SteamLibraryException
+use Psr\Http\Message\RequestInterface;
+
+class GeneralSteamException extends SteamRequestException
 {
 
-    public function __construct($url)
+    /**
+     * GeneralSteamException constructor.
+     * @param RequestInterface $request
+     * @param null|RequestInterface $response
+     */
+    public function __construct($request, $response)
     {
-        parent::__construct('General steam exception for url ' . $url);
+        parent::__construct($request, $response);
     }
 }
