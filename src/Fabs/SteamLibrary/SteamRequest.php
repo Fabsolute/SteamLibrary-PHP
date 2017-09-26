@@ -4,7 +4,11 @@
 namespace Fabs\SteamLibrary;
 
 
+use Fabs\SteamLibrary\Exception\GeneralSteamException;
+use Fabs\SteamLibrary\Exception\BadGatewayException;
+use Fabs\SteamLibrary\Exception\TooManyRequestException;
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\RequestException;
 
 class SteamRequest
 {
@@ -22,6 +26,9 @@ class SteamRequest
      * @param string $url
      * @param bool $do_not_proxy
      * @return mixed
+     * @throws BadGatewayException
+     * @throws GeneralSteamException
+     * @throws TooManyRequestException
      * @author necipallef <necipallef@gmail.com>
      */
     public static function get($url, $do_not_proxy = false)
@@ -41,8 +48,26 @@ class SteamRequest
         }
 
         $client = new Client($config);
-        $json_content = $client->get($url)->getBody()->getContents();
-        return json_decode($json_content, true);
+        try {
+            $json_content = $client->get($url)->getBody()->getContents();
+            return json_decode($json_content, true);
+        } catch (RequestException $exception){
+            switch ($exception->getResponse()->getStatusCode()){
+                case 429:
+                    throw new TooManyRequestException($exception->getRequest()->getUri()->getPath());
+                case 500:
+                    throw new GeneralSteamException($exception->getRequest()->getUri()->getPath());
+                case 502:
+                    $reason_phrase = $exception->getResponse()->getReasonPhrase();
+                    if ($reason_phrase === null){
+                        $reason_phrase = '';
+                    }
+                    $reason_message = sprintf('body %s, reason %s', $exception->getResponse()->getBody(), $reason_phrase);
+                    throw new BadGatewayException($exception->getRequest()->getUri()->getPath(), $reason_message);
+                default:
+                    throw $exception;
+            }
+        }
     }
 
 
