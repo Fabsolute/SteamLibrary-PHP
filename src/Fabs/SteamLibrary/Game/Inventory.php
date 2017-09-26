@@ -2,6 +2,7 @@
 
 namespace Fabs\SteamLibrary\Game;
 
+use Fabs\SteamLibrary\Exception\BadGatewayException;
 use Fabs\SteamLibrary\Exception\GeneralSteamException;
 use Fabs\SteamLibrary\Exception\InvalidSteamInventoryException;
 use Fabs\SteamLibrary\Exception\TooManyRequestException;
@@ -23,6 +24,7 @@ class Inventory
      * @throws GeneralSteamException
      * @throws InvalidSteamInventoryException
      * @throws TooManyRequestException
+     * @throws BadGatewayException
      */
     protected static function getSteamItemsFromPartnerID($partner_id, $game_id, $game_context)
     {
@@ -39,6 +41,7 @@ class Inventory
      * @throws GeneralSteamException
      * @throws InvalidSteamInventoryException
      * @throws TooManyRequestException
+     * @throws BadGatewayException
      */
     protected static function getSteamItemsFromSteamID($steam_id, $game_id, $game_context)
     {
@@ -54,6 +57,7 @@ class Inventory
      * @throws GeneralSteamException
      * @throws InvalidSteamInventoryException
      * @throws TooManyRequestException
+     * @throws BadGatewayException
      */
     private static function getSteamInventoryFromSteamID($steam_id, $game_id, $game_context)
     {

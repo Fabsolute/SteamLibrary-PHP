@@ -10,6 +10,9 @@ namespace Fabs\SteamLibrary;
 
 
 use Fabs\SteamLibrary\Constant\TradeOfferStates;
+use Fabs\SteamLibrary\Exception\BadGatewayException;
+use Fabs\SteamLibrary\Exception\GeneralSteamException;
+use Fabs\SteamLibrary\Exception\TooManyRequestException;
 use Fabs\SteamLibrary\Model\APIResponseModel;
 use Fabs\SteamLibrary\Model\TradeOffer\TradeOfferResponseModel;
 use Fabs\SteamLibrary\Model\TradeOffer\TradeOffersResponseModel;
@@ -49,6 +52,9 @@ class TradeOfferHandler
 
     /**
      * @param string $trade_offer_id
+     * @throws BadGatewayException
+     * @throws GeneralSteamException
+     * @throws TooManyRequestException
      * @return TradeOfferResponseModel
      */
     public function getTradeOffer($trade_offer_id)
@@ -60,6 +66,9 @@ class TradeOfferHandler
 
     /**
      * @param $trade_offer_id
+     * @throws BadGatewayException
+     * @throws GeneralSteamException
+     * @throws TooManyRequestException
      * @return string
      */
     public function getTradeOfferStateByTradeOfferID($trade_offer_id)
@@ -102,6 +111,9 @@ class TradeOfferHandler
      * @param bool $active_only
      * @param bool $historical_only
      * @param string $time_historical_cutoff
+     * @throws BadGatewayException
+     * @throws GeneralSteamException
+     * @throws TooManyRequestException
      * @return TradeOffersResponseModel
      */
     public function getTradeOffers($get_sent_offers, $get_received_offers, $get_description, $active_only, $historical_only, $time_historical_cutoff = "1389106496")
@@ -123,6 +135,9 @@ class TradeOfferHandler
 
     /**
      * @param string $time_historical_cutoff
+     * @throws BadGatewayException
+     * @throws GeneralSteamException
+     * @throws TooManyRequestException
      * @return TradeOffersResponseModel
      */
     public function getAllOffers($time_historical_cutoff = "1389106496")
@@ -134,6 +149,9 @@ class TradeOfferHandler
      * @param bool $get_sent_offers
      * @param bool $get_received_offers
      * @param bool $get_descriptions
+     * @throws BadGatewayException
+     * @throws GeneralSteamException
+     * @throws TooManyRequestException
      * @return TradeOffersResponseModel
      */
     public function getActiveTradeOffers($get_sent_offers, $get_received_offers, $get_descriptions)
@@ -143,6 +161,9 @@ class TradeOfferHandler
 
     /**
      * @param string $time_last_visit
+     * @throws BadGatewayException
+     * @throws GeneralSteamException
+     * @throws TooManyRequestException
      * @return TradeOffersSummaryModel
      */
     public function getTradeOffersSummary($time_last_visit)
@@ -184,6 +205,9 @@ class TradeOfferHandler
      * @param string[] $query_parameters
      * @param string $type
      * @param array $body
+     * @throws BadGatewayException
+     * @throws GeneralSteamException
+     * @throws TooManyRequestException
      * @return APIResponseModel
      */
     protected function executeQuery($api, $query_parameters, $type = 'GET', $body = [])
