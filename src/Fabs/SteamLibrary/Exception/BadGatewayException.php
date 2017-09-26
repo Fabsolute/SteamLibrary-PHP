@@ -4,15 +4,18 @@
 namespace Fabs\SteamLibrary\Exception;
 
 
-class BadGatewayException extends SteamLibraryException
+use Psr\Http\Message\RequestInterface;
+
+class BadGatewayException extends SteamRequestException
 {
 
-    public function __construct($request_url, $response)
+    /**
+     * BadGatewayException constructor.
+     * @param RequestInterface $request
+     * @param null|RequestInterface $response
+     */
+    public function __construct($request, $response)
     {
-        if ($response === null){
-            $response = '';
-        }
-
-        parent::__construct('Bad gateway exception for request url ' . $request_url . ', response ' . $response);
+        parent::__construct($request, $response);
     }
 }
