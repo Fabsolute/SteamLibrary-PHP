@@ -59,7 +59,7 @@ class Inventory
     {
         try {
 
-            $url = sprintf('https://steamcommunity.com/inventory/%s/%s/%s',
+            $url = sprintf('https://steamcommunity.com/inventory/%s/%s/%s?count=2000',
                 $steam_id, (string)$game_id, (string)$game_context);
             $content = SteamRequest::get($url);
             /** @var SteamInventoryModel $object */
