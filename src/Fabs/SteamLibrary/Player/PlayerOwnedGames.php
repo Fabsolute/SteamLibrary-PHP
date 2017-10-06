@@ -5,6 +5,9 @@ namespace Fabs\SteamLibrary\Player;
 
 
 use Fabs\SteamLibrary\Constant\IPlayerService;
+use Fabs\SteamLibrary\Exception\BadGatewayException;
+use Fabs\SteamLibrary\Exception\GeneralSteamException;
+use Fabs\SteamLibrary\Exception\TooManyRequestException;
 use Fabs\SteamLibrary\Game\CSGO\Inventory;
 use Fabs\SteamLibrary\Model\APIResponseModel;
 use Fabs\SteamLibrary\Model\Player\PlayerOwnedGamesModel;
@@ -17,6 +20,9 @@ class PlayerOwnedGames
      * @param string $api_key
      * @param string $steam_id
      * @param string $format
+     * @throws BadGatewayException
+     * @throws GeneralSteamException
+     * @throws TooManyRequestException
      * @return PlayerOwnedGamesModel|null
      * @author necipallef <necipallef@gmail.com>
      */
@@ -39,6 +45,9 @@ class PlayerOwnedGames
     /**
      * @param string $api_key
      * @param string $steam_id
+     * @throws BadGatewayException
+     * @throws GeneralSteamException
+     * @throws TooManyRequestException
      * @return float|int
      * @author necipallef <necipallef@gmail.com>
      */
