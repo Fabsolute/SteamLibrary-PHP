@@ -52,6 +52,10 @@ class SteamRequest
             $json_content = $client->get($url)->getBody()->getContents();
             return json_decode($json_content, true);
         } catch (RequestException $exception){
+            if ($exception->getResponse() === null){
+                throw $exception;
+            }
+
             switch ($exception->getResponse()->getStatusCode()){
                 case 429:
                     throw new TooManyRequestException($exception->getRequest()->getUri()->getPath());
