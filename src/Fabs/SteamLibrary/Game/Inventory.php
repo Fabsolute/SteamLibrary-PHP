@@ -5,6 +5,7 @@ namespace Fabs\SteamLibrary\Game;
 use Fabs\SteamLibrary\Exception\BadGatewayException;
 use Fabs\SteamLibrary\Exception\GeneralSteamException;
 use Fabs\SteamLibrary\Exception\InvalidSteamInventoryException;
+use Fabs\SteamLibrary\Exception\SteamLibraryException;
 use Fabs\SteamLibrary\Exception\TooManyRequestException;
 use Fabs\SteamLibrary\Model\Item\SteamInventoryModel;
 use Fabs\SteamLibrary\Model\Item\ItemModel;
@@ -56,8 +57,8 @@ class Inventory
      * @return SteamInventoryModel
      * @throws GeneralSteamException
      * @throws InvalidSteamInventoryException
+     * @throws SteamLibraryException
      * @throws TooManyRequestException
-     * @throws BadGatewayException
      */
     private static function getSteamInventoryFromSteamID($steam_id, $game_id, $game_context)
     {
@@ -68,6 +69,14 @@ class Inventory
             $content = SteamRequest::get($url);
             /** @var SteamInventoryModel $object */
             $object = SteamInventoryModel::deserialize($content);
+            if ($object === null){
+                $reason = sprintf(
+                    'GET request to %s return null for %s. Content %s',
+                    $url,
+                    'SteamInventoryModel::deserialize($content)',
+                    $content);
+                throw new SteamLibraryException($reason);
+            }
             return $object;
         } catch (RequestException $exception) {
             if ($exception->getResponse() !== null) {
