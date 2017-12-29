@@ -417,7 +417,8 @@ class CSGOItemPhaseIndices
             584 => "Phobos",
             585 => "Violent Daimyo",
             586 => "Wasteland Rebel",
-            593 => "Chopper"
+            593 => "Chopper",
+            618 => "Phase 1"
         ];
 
 //      There are duplicated keys
