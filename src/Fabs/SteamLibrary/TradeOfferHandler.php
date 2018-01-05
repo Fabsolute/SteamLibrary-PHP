@@ -122,7 +122,7 @@ class TradeOfferHandler
             $options = [
                 'get_sent_offers' => $get_sent_offers ? '1' : '0',
                 'get_received_offers' => $get_received_offers ? '1' : '0',
-                'get_description' => $get_description ? '1' : '0',
+                'get_descriptions' => $get_description ? '1' : '0',
                 'active_only' => $active_only ? '1' : '0',
                 'historical_only' => $historical_only ? '1' : '0',
                 'time_historical_cutoff' => $time_historical_cutoff
