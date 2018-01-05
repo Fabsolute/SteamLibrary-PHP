@@ -27,6 +27,6 @@ class TradeOffersResponseModel extends SerializableObject
 
         $this->registerProperty('trade_offers_sent', TradeOfferModel::class, true);
         $this->registerProperty('trade_offers_received', TradeOfferModel::class, true);
-        $this->registerProperty('$descriptions', SteamDescriptionModel::class, true);
+        $this->registerProperty('descriptions', SteamDescriptionModel::class, true);
     }
 }
