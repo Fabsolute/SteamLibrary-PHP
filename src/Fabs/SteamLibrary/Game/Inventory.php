@@ -7,6 +7,8 @@ use Fabs\SteamLibrary\Exception\GeneralSteamException;
 use Fabs\SteamLibrary\Exception\InvalidSteamInventoryException;
 use Fabs\SteamLibrary\Exception\SteamLibraryException;
 use Fabs\SteamLibrary\Exception\TooManyRequestException;
+use Fabs\SteamLibrary\Model\Item\SteamAssetModel;
+use Fabs\SteamLibrary\Model\Item\SteamDescriptionModel;
 use Fabs\SteamLibrary\Model\Item\SteamInventoryModel;
 use Fabs\SteamLibrary\Model\Item\ItemModel;
 use Fabs\SteamLibrary\Model\Item\SteamStickerModel;
@@ -69,7 +71,7 @@ class Inventory
             $content = SteamRequest::get($url);
             /** @var SteamInventoryModel $object */
             $object = SteamInventoryModel::deserialize($content);
-            if ($object === null){
+            if ($object === null) {
                 $reason = sprintf(
                     'GET request to %s return null for %s. Content %s',
                     $url,
@@ -102,14 +104,26 @@ class Inventory
      * @param $owner_steam_id string
      * @return \Fabs\SteamLibrary\Model\Item\ItemModel[]
      */
-    private static function getSteamItemsFromInventory($inventory, $owner_steam_id)
+    public static function getSteamItemsFromInventory($inventory, $owner_steam_id = null)
+    {
+        return self::getSteamItemsFromAssetsAndDescriptions($inventory->assets, $inventory->descriptions, $owner_steam_id);
+    }
+
+
+    /**
+     * @param SteamAssetModel[] $assets
+     * @param SteamDescriptionModel[] $descriptions
+     * @param $owner_steam_id string
+     * @return ItemModel[]
+     */
+    public static function getSteamItemsFromAssetsAndDescriptions($assets, $descriptions, $owner_steam_id = null)
     {
         $steam_items = [];
-        foreach ($inventory->assets as $asset) {
+        foreach ($assets as $asset) {
             $steam_item = new ItemModel();
             $steam_item->assetid = $asset->assetid;
 
-            foreach ($inventory->descriptions as $description) {
+            foreach ($descriptions as $description) {
                 if ($asset->classid === $description->classid && $asset->instanceid === $description->instanceid) {
                     $steam_item->description = $description;
                     break;
@@ -175,13 +189,15 @@ class Inventory
                     }
                 }
 
-                foreach ($steam_item->description->actions as $action) {
-                    if ($action->name === 'Inspect in Game...') {
+                if ($owner_steam_id !== null) {
+                    foreach ($steam_item->description->actions as $action) {
+                        if ($action->name === 'Inspect in Game...') {
 
-                        $steam_item->inspect_in_game_link = str_replace('%owner_steamid%', $owner_steam_id,
-                            str_replace('%assetid%', $steam_item->assetid, $action->link)
-                        );
-                        break;
+                            $steam_item->inspect_in_game_link = str_replace('%owner_steamid%', $owner_steam_id,
+                                str_replace('%assetid%', $steam_item->assetid, $action->link)
+                            );
+                            break;
+                        }
                     }
                 }
 
