@@ -52,14 +52,19 @@ class TradeOfferHandler
 
     /**
      * @param string $trade_offer_id
+     * @param bool $get_descriptions
+     * @return TradeOfferResponseModel
      * @throws BadGatewayException
      * @throws GeneralSteamException
      * @throws TooManyRequestException
-     * @return TradeOfferResponseModel
      */
-    public function getTradeOffer($trade_offer_id)
+    public function getTradeOffer($trade_offer_id, $get_descriptions = false)
     {
-        $response_model = $this->executeQuery('GetTradeOffer', ['tradeofferid' => $trade_offer_id]);
+        $options = [
+            'tradeofferid' => $trade_offer_id,
+            'get_descriptions' => $get_descriptions ? '1' : '0'
+        ];
+        $response_model = $this->executeQuery('GetTradeOffer', $options);
 
         return TradeOfferResponseModel::deserialize($response_model->response);
     }
@@ -107,7 +112,7 @@ class TradeOfferHandler
     /**
      * @param bool $get_sent_offers
      * @param bool $get_received_offers ,
-     * @param bool $get_description
+     * @param bool $get_descriptions
      * @param bool $active_only
      * @param bool $historical_only
      * @param string $time_historical_cutoff
@@ -116,13 +121,13 @@ class TradeOfferHandler
      * @throws TooManyRequestException
      * @return TradeOffersResponseModel
      */
-    public function getTradeOffers($get_sent_offers, $get_received_offers, $get_description, $active_only, $historical_only, $time_historical_cutoff = "1389106496")
+    public function getTradeOffers($get_sent_offers, $get_received_offers, $get_descriptions, $active_only, $historical_only, $time_historical_cutoff = "1389106496")
     {
         if ($get_sent_offers || $get_received_offers) {
             $options = [
                 'get_sent_offers' => $get_sent_offers ? '1' : '0',
                 'get_received_offers' => $get_received_offers ? '1' : '0',
-                'get_descriptions' => $get_description ? '1' : '0',
+                'get_descriptions' => $get_descriptions ? '1' : '0',
                 'active_only' => $active_only ? '1' : '0',
                 'historical_only' => $historical_only ? '1' : '0',
                 'time_historical_cutoff' => $time_historical_cutoff
