@@ -25,6 +25,10 @@ class Inventory
      * @param string $game_id
      * @param int $game_context
      * @return ItemModel[]
+     * @throws GeneralSteamException
+     * @throws InvalidSteamInventoryException
+     * @throws TooManyRequestException
+     * @throws BadGatewayException
      */
     public static function getSteamItemsFromPartnerIdAndGameIdAndGameContext(
         $partner_id,
