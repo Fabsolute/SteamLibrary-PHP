@@ -19,6 +19,24 @@ use GuzzleHttp\Exception\RequestException;
 class Inventory
 {
 
+
+    /**
+     * @param string|int $partner_id
+     * @param string $game_id
+     * @param int $game_context
+     * @return ItemModel[]
+     */
+    public static function getSteamItemsFromPartnerIdAndGameIdAndGameContext(
+        $partner_id,
+        $game_id,
+        $game_context = 2
+    )
+    {
+        $steam_id = PlayerProfile::getSteamIDFromPartnerID($partner_id);
+        return self::getSteamItemsFromSteamID($steam_id, $game_id, $game_context);
+    }
+
+
     /**
      * @param $partner_id string|int
      * @param $game_id string
