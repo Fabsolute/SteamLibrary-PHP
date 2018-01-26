@@ -2,6 +2,7 @@
 
 namespace Fabs\SteamLibrary\Game\CSGO;
 
+use Fabs\SteamLibrary\Constant\AppIDs;
 use Fabs\SteamLibrary\Exception\BadGatewayException;
 use Fabs\SteamLibrary\Exception\GeneralSteamException;
 use Fabs\SteamLibrary\Exception\InvalidSteamInventoryException;
@@ -13,7 +14,7 @@ use Fabs\SteamLibrary\SteamTradeURLHandler;
 
 class Inventory extends InventoryBase
 {
-    const GameID = "730";
+    const GameID = AppIDs::CSGO;
     const ContextID = "2";
     public static $CSGOFloatAPIURL = 'https://api.csgofloat.com:1738';
 
