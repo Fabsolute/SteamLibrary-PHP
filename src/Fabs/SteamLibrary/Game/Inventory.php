@@ -115,6 +115,7 @@ class Inventory
         $steam_items = [];
         foreach ($inventory->assets as $asset) {
             $steam_item = new ItemModel();
+            $steam_item->amount = $asset->amount;
             $steam_item->assetid = $asset->assetid;
 
             foreach ($inventory->descriptions as $description) {
