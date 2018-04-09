@@ -19,7 +19,8 @@
     "php": "^7.0",
     "guzzlehttp/guzzle": "~6.0",
     "fabs/serialize": "dev-develop",
-    "iignatov/lightopenid": "*"
+    "iignatov/lightopenid": "*",
+    "fabstract/datetime-handler" : "0.1"
   },
   "autoload": {
     "psr-0": {
