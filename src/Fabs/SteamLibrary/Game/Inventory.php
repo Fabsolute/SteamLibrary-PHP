@@ -14,6 +14,7 @@ use Fabs\SteamLibrary\Model\Item\ItemModel;
 use Fabs\SteamLibrary\Model\Item\SteamStickerModel;
 use Fabs\SteamLibrary\Player\PlayerProfile;
 use Fabs\SteamLibrary\SteamRequest;
+use Fabstract\Component\DateTimeHandler\DateTimeHandler;
 use GuzzleHttp\Exception\RequestException;
 
 class Inventory
@@ -233,7 +234,28 @@ class Inventory
                         }
                     }
                 }
+
+                # region get tradable date
+                foreach ($steam_item->description->owner_descriptions as $owner_description) {
+                    if ($owner_description->type !== 'html') {
+                        continue;
+                    }
+
+                    if (preg_match('/^Tradable After (?<date>.*) GMT$/', $owner_description->value, $matches) === 1) {
+                        $steam_item->tradable_after_original = $owner_description->value;
+
+                        $date_raw = $matches['date'];
+                        $date_clean = preg_replace('/[()]/', '', $date_raw); // remove parenthesis
+                        $timestamp = DateTimeHandler::strToTimeUTC($date_clean);
+                        $steam_item->tradable_after_timestamp = $timestamp;
+
+                        break;
+                    }
+                }
+
+                # endregion
             }
+
             $steam_items[] = $steam_item;
         }
 
