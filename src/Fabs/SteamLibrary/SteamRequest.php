@@ -19,6 +19,8 @@ class SteamRequest
     public static $proxy_port = 0;
     /** @var string */
     public static $proxy_username_password = null;
+    /** @var string */
+    public static $cookie = null;
 
     const BASE_IMAGE_URL = 'https://steamcommunity-a.akamaihd.net/economy/image/';
 
@@ -47,16 +49,21 @@ class SteamRequest
             }
         }
 
+        if (self::$cookie !== null) {
+            $config['headers']['Cookie'] = self::$cookie;
+        }
+
         $client = new Client($config);
+
         try {
             $json_content = $client->get($url)->getBody()->getContents();
             return json_decode($json_content, true);
-        } catch (RequestException $exception){
-            if ($exception->getResponse() === null){
+        } catch (RequestException $exception) {
+            if ($exception->getResponse() === null) {
                 throw $exception;
             }
 
-            switch ($exception->getResponse()->getStatusCode()){
+            switch ($exception->getResponse()->getStatusCode()) {
                 case 429:
                     throw new TooManyRequestException($exception->getRequest()->getUri()->getPath());
                 case 500:
