@@ -28,6 +28,8 @@ class SteamDescriptionModel extends SerializableObject
     public $icon_url_large = null;
     /** @var SteamDescriptionDescriptionModel[] */
     public $descriptions = [];
+    /** @var SteamDescriptionDescriptionModel[] */
+    public $owner_descriptions = [];
     /** @var int */
     public $tradable = 0;
     /** @var SteamDescriptionActionModel[] */
@@ -59,6 +61,7 @@ class SteamDescriptionModel extends SerializableObject
     {
         parent::__construct();
         $this->registerProperty('descriptions', SteamDescriptionDescriptionModel::class, true);
+        $this->registerProperty('owner_descriptions', SteamDescriptionDescriptionModel::class, true);
         $this->registerProperty('actions', SteamDescriptionActionModel::class, true);
         $this->registerProperty('market_actions', SteamDescriptionActionModel::class, true);
         $this->registerProperty('tags', SteamDescriptionTagModel::class, true);
