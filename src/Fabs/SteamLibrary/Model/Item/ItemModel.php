@@ -27,6 +27,10 @@ class ItemModel extends SteamAssetModel
     public $rarity_name = null;
     /** @var string */
     public $rarity_color = null;
+    /** @var int */
+    public $tradable_after_timestamp = 0;
+    /** @var string */
+    public $tradable_after_original = null;
 
     public function __construct()
     {
