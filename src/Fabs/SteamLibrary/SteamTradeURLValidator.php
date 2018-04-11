@@ -18,7 +18,9 @@ class SteamTradeURLValidator
         $trade_offer_escrow_model =
             $this->getEscrowFromPartnerIdAndToken($steam_partner_id, $steam_token, $steam_cookie);
 
-        return $trade_offer_escrow_model !== null &&
+        return
+            $trade_offer_escrow_model !== null &&
+            $trade_offer_escrow_model->error === null &&
             $trade_offer_escrow_model->days_their_escrow === 0;
     }
 
@@ -35,6 +37,7 @@ class SteamTradeURLValidator
 
         return
             $trade_offer_escrow_model !== null &&
+            $trade_offer_escrow_model->error === null &&
             $trade_offer_escrow_model->days_my_escrow === 0;
     }
 
@@ -51,6 +54,7 @@ class SteamTradeURLValidator
 
         return
             $trade_offer_escrow_model !== null &&
+            $trade_offer_escrow_model->error === null &&
             $trade_offer_escrow_model->days_my_escrow === 0 &&
             $trade_offer_escrow_model->days_their_escrow === 0;
     }
@@ -71,7 +75,7 @@ class SteamTradeURLValidator
                     'steamLoginSecure' => $steam_cookie->steam_login_secure
                 ];
         }
-        
+
         $request_url = "https://steamcommunity.com/tradeoffer/new/?partner=${steam_partner_id}&token=${steam_token}";
         $response = SteamRequest::get($request_url, true, false);
         if ($response === null) {
