@@ -13,7 +13,7 @@ class SteamTradeURLValidator
      * @param SteamCookie $steam_cookie
      * @return bool
      */
-    public function isValidForSending($steam_partner_id, $steam_token, $steam_cookie)
+    public function isValidForSending($steam_partner_id, $steam_token, $steam_cookie = null)
     {
         $trade_offer_escrow_model =
             $this->getEscrowFromPartnerIdAndToken($steam_partner_id, $steam_token, $steam_cookie);
@@ -28,7 +28,7 @@ class SteamTradeURLValidator
      * @param SteamCookie $steam_cookie
      * @return bool
      */
-    public function isValidForReceiving($steam_partner_id, $steam_token, $steam_cookie)
+    public function isValidForReceiving($steam_partner_id, $steam_token, $steam_cookie = null)
     {
         $trade_offer_escrow_model =
             $this->getEscrowFromPartnerIdAndToken($steam_partner_id, $steam_token, $steam_cookie);
@@ -44,7 +44,7 @@ class SteamTradeURLValidator
      * @param SteamCookie $steam_cookie
      * @return bool
      */
-    public function isValidForSendingAndReceiving($steam_partner_id, $steam_token, $steam_cookie)
+    public function isValidForSendingAndReceiving($steam_partner_id, $steam_token, $steam_cookie = null)
     {
         $trade_offer_escrow_model =
             $this->getEscrowFromPartnerIdAndToken($steam_partner_id, $steam_token, $steam_cookie);
@@ -61,14 +61,17 @@ class SteamTradeURLValidator
      * @param SteamCookie $steam_cookie
      * @return TradeOfferEscrowModel|null
      */
-    public function getEscrowFromPartnerIdAndToken($steam_partner_id, $steam_token, $steam_cookie)
+    public function getEscrowFromPartnerIdAndToken($steam_partner_id, $steam_token, $steam_cookie = null)
     {
-        SteamRequest::$cookie =
-            [
-                'sessionid' => $steam_cookie->session_id,
-                'steamLogin' => $steam_cookie->steam_login,
-                'steamLoginSecure' => $steam_cookie->steam_login_secure
-            ];
+        if ($steam_cookie !== null) {
+            SteamRequest::$cookie =
+                [
+                    'sessionid' => $steam_cookie->session_id,
+                    'steamLogin' => $steam_cookie->steam_login,
+                    'steamLoginSecure' => $steam_cookie->steam_login_secure
+                ];
+        }
+        
         $request_url = "https://steamcommunity.com/tradeoffer/new/?partner=${steam_partner_id}&token=${steam_token}";
         $response = SteamRequest::get($request_url, true, false);
         if ($response === null) {
