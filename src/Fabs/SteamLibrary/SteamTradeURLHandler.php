@@ -27,7 +27,7 @@ class SteamTradeURLHandler
 
     private $base_url = 'https://steamcommunity.com/tradeoffer';
     private $prefix = '/new/?';
-    private $partner_id_regex_base = '[0-9]*';
+    private $partner_id_regex_base = '[0-9]+';
     private $partner_id_regex;
     private $token_regex_base = '[a-zA-Z0-9_-]{8}';
     private $token_regex;
