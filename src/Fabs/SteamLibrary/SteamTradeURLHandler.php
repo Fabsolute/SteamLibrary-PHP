@@ -69,21 +69,17 @@ class SteamTradeURLHandler
      */
     public function create()
     {
-        if ($this->partner_id != null && $this->token != null)
-        {
-            if (!preg_match('/^' . $this->partner_id_regex_base . '$/', $this->partner_id))
-            {
+        if ($this->partner_id != null && $this->token != null) {
+            if (!preg_match('/^' . $this->partner_id_regex_base . '$/', $this->partner_id)) {
                 throw new InvalidSteamPartnerIdException($this->partner_id);
             }
 
-            if (!preg_match('/^' . $this->token_regex_base . '$/', $this->token))
-            {
+            if (!preg_match('/^' . $this->token_regex_base . '$/', $this->token)) {
                 throw new InvalidSteamTokenException($this->token);
             }
 
             $this->full_url = $this->base_url . $this->prefix . 'partner=' . $this->partner_id . '&token=' . $this->token;
-        } else
-        {
+        } else {
             $this->full_url = null;
         }
 
@@ -116,8 +112,7 @@ class SteamTradeURLHandler
      */
     public function isValid()
     {
-        if ($this->full_url == null)
-        {
+        if ($this->full_url == null) {
             return false;
         }
 
@@ -135,29 +130,24 @@ class SteamTradeURLHandler
      */
     public function decompose()
     {
-        if ($this->full_url != null)
-        {
-            if (!preg_match('/^' . $this->escapeSlashes($this->base_url . $this->prefix) . '/', $this->full_url))
-            {
+        if ($this->full_url != null) {
+            if (!preg_match('/^' . $this->escapeSlashes($this->base_url . $this->prefix) . '/', $this->full_url)) {
                 throw new NotASteamTradeURLException($this->full_url);
             }
 
             $partner_matches = [];
-            if (!preg_match($this->partner_id_regex, $this->full_url, $partner_matches))
-            {
+            if (!preg_match($this->partner_id_regex, $this->full_url, $partner_matches)) {
                 throw new SteamPartnerIdNotFoundException($this->full_url);
             }
 
             $token_matches = [];
-            if (!preg_match($this->token_regex, $this->full_url, $token_matches))
-            {
+            if (!preg_match($this->token_regex, $this->full_url, $token_matches)) {
                 throw new SteamTokenNotFoundException($this->full_url);
             }
 
             $this->partner_id = $partner_matches[1];
             $this->token = $token_matches[1];
-        } else
-        {
+        } else {
             $this->partner_id = null;
             $this->token = null;
         }
@@ -200,11 +190,10 @@ class SteamTradeURLHandler
      */
     public function getTradeOfferURLFromOfferId($trade_offer_id)
     {
-        if ($trade_offer_id === null || empty(trim($trade_offer_id)))
-        {
+        if ($trade_offer_id === null || empty(trim($trade_offer_id))) {
             return null;
         }
-        
+
         return $this->base_url . '/' . $trade_offer_id;
     }
 }
