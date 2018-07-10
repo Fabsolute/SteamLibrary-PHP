@@ -13,6 +13,7 @@ class AppIDs
     const H1Z1 = '433850';
     const TF2 = '440';
     const VGO = '1912';
+    const RUST = '252490';
 
     const MAP =
         [
@@ -21,6 +22,7 @@ class AppIDs
             self::DOTA_2 => 'DOTA_2',
             self::H1Z1 => 'H1Z1',
             self::TF2 => 'TF2',
-            self::VGO => 'VGO'
+            self::VGO => 'VGO',
+            self::RUST => 'RUST'
         ];
 }
