@@ -20,7 +20,7 @@
     "guzzlehttp/guzzle": "~6.0",
     "fabs/serialize": "dev-develop",
     "iignatov/lightopenid": "*",
-    "fabstract/datetime-handler" : "0.1"
+    "fabstract/datetime-handler" : "^0.1"
   },
   "autoload": {
     "psr-0": {
